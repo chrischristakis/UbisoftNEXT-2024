@@ -77,7 +77,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)includes;$(ProjectDir)includes\glut;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)includes\glut;$(ProjectDir)includes;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)includes\glut\lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
@@ -89,8 +89,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\glut;$(IncludePath)</IncludePath>
-    <LibraryPath>.\glut\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)includes\glut;$(ProjectDir)includes;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)includes\glut\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -190,7 +190,7 @@
     <ClCompile Include="includes\App\SimpleController.cpp" />
     <ClCompile Include="includes\App\SimpleSound.cpp" />
     <ClCompile Include="includes\App\SimpleSprite.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="includes\stb_image\stb_image.cpp" />
     <ClCompile Include="includes\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
