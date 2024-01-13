@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="includes\stdafx.cpp" />
+    <ClCompile Include="includes\App\app.cpp">
+      <Filter>API</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\App\main.cpp">
+      <Filter>API</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\App\SimpleController.cpp">
+      <Filter>API</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\App\SimpleSound.cpp">
+      <Filter>API</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\App\SimpleSprite.cpp">
+      <Filter>API</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\stb_image\stb_image.cpp">
+      <Filter>stb_image</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes\stdafx.h" />
+    <ClInclude Include="includes\App\app.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\App\AppSettings.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\App\main.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\App\SimpleController.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\App\SimpleSound.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\App\SimpleSprite.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\targetver.h">
+      <Filter>API</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\stb_image\stb_image.h">
+      <Filter>stb_image</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="stb_image">
+      <UniqueIdentifier>{61cfc19b-c57e-4021-b530-bac172fcba86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="API">
+      <UniqueIdentifier>{f318918d-bb9f-4402-ae1c-4f72186d16f6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
