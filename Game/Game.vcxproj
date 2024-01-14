@@ -183,6 +183,11 @@
     <ClInclude Include="includes\stb_image\stb_image.h" />
     <ClInclude Include="includes\stdafx.h" />
     <ClInclude Include="includes\targetver.h" />
+    <ClInclude Include="src\Math\Math.h" />
+    <ClInclude Include="src\Math\Matrix.h" />
+    <ClInclude Include="src\Math\Utils.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Math\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="includes\App\app.cpp" />
@@ -198,6 +203,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Math\Matrix_Transform.cpp" />
+    <ClCompile Include="src\Math\Matrix_Transform.h" />
+    <ClCompile Include="src\Math\Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
