@@ -2,65 +2,29 @@
 
 #include "stdafx.h"
 
-struct Vector2f {
-	float x, y;
-
-	Vector2f(): x(0), y(0) { }
-	Vector2f(float x, float y): x(x), y(y) { }
-
-	std::string to_string() {
-		return std::to_string(x) + ", " + std::to_string(y);
-	}
-};
-
 struct Vector3f {
 	float x, y, z;
 
-	Vector3f() : x(0), y(0), z(0) { }
-	Vector3f(float x, float y, float z) : x(x), y(y), z(z) { }
+	Vector3f();
+	Vector3f(float x, float y, float z);
 
-	Vector3f operator-(float scalar) const {
-		return Vector3f(x - scalar, y - scalar, z - scalar);
-	}
+	Vector3f operator-(float scalar) const;
+	Vector3f operator-(const Vector3f& other) const;
+	Vector3f operator+(const Vector3f& other) const;
+	Vector3f operator/(float scalar) const;
+	Vector3f operator*(float scalar) const;
 
-	Vector3f operator-(const Vector3f& other) const {
-		return Vector3f(x - other.x, y - other.y, z - other.z);
-	}
-
-	Vector3f operator+(const Vector3f& other) const {
-		return Vector3f(x + other.x, y + other.y, z + other.z);
-	}
-
-	Vector3f operator/(float scalar) const {
-		return Vector3f(x / scalar, y / scalar, z / scalar);
-	}
-
-	Vector3f operator*(float scalar) const {
-		return Vector3f(x * scalar, y * scalar, z * scalar);
-	}
-
-	std::string to_string() const {
-		return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
-	}
+	std::string to_string() const;
 };
 
 struct Vector4f {
 	float x, y, z, w;
 
-	Vector4f() : x(0), y(0), z(0), w(0) { }
-	Vector4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
-	Vector4f(const Vector3f& other, float w): x(other.x), y(other.y), z(other.z), w(w) {}
+	Vector4f();
+	Vector4f(float x, float y, float z, float w);
+	Vector4f(const Vector3f& other, float w);
 
-	Vector4f operator+(const Vector3f& other) {
-		Vector4f res;
-		res.x = this->x + other.x;
-		res.y = this->y + other.y;
-		res.z = this->z + other.z;
-		res.w = this->w;
-		return res;
-	}
+	Vector4f operator+(const Vector3f& other);
 
-	std::string to_string() const {
-		return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w);
-	}
+	std::string to_string() const;
 };

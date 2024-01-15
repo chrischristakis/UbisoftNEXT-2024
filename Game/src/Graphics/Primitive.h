@@ -9,13 +9,8 @@ struct Primitive {
 	std::vector<Vertex> vertices;
 	Vector3f color;
 
-	Primitive(): color(1, 1, 1) { }
+	Primitive();
 
-	void PushVertex(float x, float y, float z) {
-		vertices.emplace_back(Vertex{x, y, z});
-	}
-
-	void PushVertex(Vertex v) {
-		vertices.emplace_back(v);
-	}
+	void PushVertex(float x, float y, float z);
+	void PushVertex(Vertex v);
 };

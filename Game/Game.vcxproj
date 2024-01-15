@@ -209,9 +209,12 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
+    <ClCompile Include="src\Graphics\Primitive.cpp" />
+    <ClCompile Include="src\Math\Matrix.cpp" />
     <ClCompile Include="src\Math\Matrix_Transform.cpp" />
     <ClCompile Include="src\Math\Matrix_Transform.h" />
     <ClCompile Include="src\Math\Utils.cpp" />
+    <ClCompile Include="src\Math\Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
