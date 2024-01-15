@@ -2035,7 +2035,7 @@ typedef struct
     // kernels
     void (*idct_block_kernel)(stbi_uc* out, int out_stride, short data[64]);
     void (*YCbCr_to_RGB_kernel)(stbi_uc* out, const stbi_uc* y, const stbi_uc* pcb, const stbi_uc* pcr, int count, int step);
-    stbi_uc* (*resample_row_hv_2_kernel)(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs);
+    stbi_uc* (*resample_row_hv_2_kernel)(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs);
 } stbi__jpeg;
 
 static int stbi__build_huffman(stbi__huffman* h, int* count)
@@ -3626,30 +3626,30 @@ typedef stbi_uc* (*resample_row_func)(stbi_uc* out, stbi_uc* in0, stbi_uc* in1,
 
 #define stbi__div4(x) ((stbi_uc) ((x) >> 2))
 
-static stbi_uc* resample_row_1(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs)
+static stbi_uc* resample_row_1(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs)
 {
     STBI_NOTUSED(out);
-    STBI_NOTUSED(in_far);
+    STBI_NOTUSED(in_Far);
     STBI_NOTUSED(w);
     STBI_NOTUSED(hs);
-    return in_near;
+    return in_Near;
 }
 
-static stbi_uc* stbi__resample_row_v_2(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs)
+static stbi_uc* stbi__resample_row_v_2(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs)
 {
     // need to generate two samples vertically for every one in input
     int i;
     STBI_NOTUSED(hs);
     for (i = 0; i < w; ++i)
-        out[i] = stbi__div4(3 * in_near[i] + in_far[i] + 2);
+        out[i] = stbi__div4(3 * in_Near[i] + in_Far[i] + 2);
     return out;
 }
 
-static stbi_uc* stbi__resample_row_h_2(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs)
+static stbi_uc* stbi__resample_row_h_2(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs)
 {
     // need to generate two samples horizontally for every one in input
     int i;
-    stbi_uc* input = in_near;
+    stbi_uc* input = in_Near;
 
     if (w == 1)
     {
@@ -3669,7 +3669,7 @@ static stbi_uc* stbi__resample_row_h_2(stbi_uc* out, stbi_uc* in_near, stbi_uc* 
     out[i * 2 + 0] = stbi__div4(input[w - 2] * 3 + input[w - 1] + 2);
     out[i * 2 + 1] = input[w - 1];
 
-    STBI_NOTUSED(in_far);
+    STBI_NOTUSED(in_Far);
     STBI_NOTUSED(hs);
 
     return out;
@@ -3677,22 +3677,22 @@ static stbi_uc* stbi__resample_row_h_2(stbi_uc* out, stbi_uc* in_near, stbi_uc* 
 
 #define stbi__div16(x) ((stbi_uc) ((x) >> 4))
 
-static stbi_uc* stbi__resample_row_hv_2(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs)
+static stbi_uc* stbi__resample_row_hv_2(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs)
 {
     // need to generate 2x2 samples for every one in input
     int i, t0, t1;
     if (w == 1)
     {
-        out[0] = out[1] = stbi__div4(3 * in_near[0] + in_far[0] + 2);
+        out[0] = out[1] = stbi__div4(3 * in_Near[0] + in_Far[0] + 2);
         return out;
     }
 
-    t1 = 3 * in_near[0] + in_far[0];
+    t1 = 3 * in_Near[0] + in_Far[0];
     out[0] = stbi__div4(t1 + 2);
     for (i = 1; i < w; ++i)
     {
         t0 = t1;
-        t1 = 3 * in_near[i] + in_far[i];
+        t1 = 3 * in_Near[i] + in_Far[i];
         out[i * 2 - 1] = stbi__div16(3 * t0 + t1 + 8);
         out[i * 2] = stbi__div16(3 * t1 + t0 + 8);
     }
@@ -3704,18 +3704,18 @@ static stbi_uc* stbi__resample_row_hv_2(stbi_uc* out, stbi_uc* in_near, stbi_uc*
 }
 
 #if defined(STBI_SSE2) || defined(STBI_NEON)
-static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs)
+static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs)
 {
     // need to generate 2x2 samples for every one in input
     int i = 0, t0, t1;
 
     if (w == 1)
     {
-        out[0] = out[1] = stbi__div4(3 * in_near[0] + in_far[0] + 2);
+        out[0] = out[1] = stbi__div4(3 * in_Near[0] + in_Far[0] + 2);
         return out;
     }
 
-    t1 = 3 * in_near[0] + in_far[0];
+    t1 = 3 * in_Near[0] + in_Far[0];
     // process groups of 8 pixels for as long as we can.
     // note we can't handle the last pixel in a row in this loop
     // because we need to handle the filter boundary conditions.
@@ -3725,8 +3725,8 @@ static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stb
         // load and perform the vertical filtering pass
         // this uses 3*x + y = 4*x + (y - x)
         __m128i zero = _mm_setzero_si128();
-        __m128i farb = _mm_loadl_epi64((__m128i*) (in_far + i));
-        __m128i nearb = _mm_loadl_epi64((__m128i*) (in_near + i));
+        __m128i farb = _mm_loadl_epi64((__m128i*) (in_Far + i));
+        __m128i nearb = _mm_loadl_epi64((__m128i*) (in_Near + i));
         __m128i farw = _mm_unpacklo_epi8(farb, zero);
         __m128i nearw = _mm_unpacklo_epi8(nearb, zero);
         __m128i diff = _mm_sub_epi16(farw, nearw);
@@ -3741,7 +3741,7 @@ static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stb
         __m128i prv0 = _mm_slli_si128(curr, 2);
         __m128i nxt0 = _mm_srli_si128(curr, 2);
         __m128i prev = _mm_insert_epi16(prv0, t1, 0);
-        __m128i next = _mm_insert_epi16(nxt0, 3 * in_near[i + 8] + in_far[i + 8], 7);
+        __m128i next = _mm_insert_epi16(nxt0, 3 * in_Near[i + 8] + in_Far[i + 8], 7);
 
         // horizontal filter, polyphase implementation since it's convenient:
         // even pixels = 3*cur + prev = cur*4 + (prev - cur)
@@ -3767,8 +3767,8 @@ static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stb
 #elif defined(STBI_NEON)
         // load and perform the vertical filtering pass
         // this uses 3*x + y = 4*x + (y - x)
-        uint8x8_t farb = vld1_u8(in_far + i);
-        uint8x8_t nearb = vld1_u8(in_near + i);
+        uint8x8_t farb = vld1_u8(in_Far + i);
+        uint8x8_t nearb = vld1_u8(in_Near + i);
         int16x8_t diff = vreinterpretq_s16_u16(vsubl_u8(farb, nearb));
         int16x8_t nears = vreinterpretq_s16_u16(vshll_n_u8(nearb, 2));
         int16x8_t curr = vaddq_s16(nears, diff); // current row
@@ -3781,7 +3781,7 @@ static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stb
         int16x8_t prv0 = vextq_s16(curr, curr, 7);
         int16x8_t nxt0 = vextq_s16(curr, curr, 1);
         int16x8_t prev = vsetq_lane_s16(t1, prv0, 0);
-        int16x8_t next = vsetq_lane_s16(3 * in_near[i + 8] + in_far[i + 8], nxt0, 7);
+        int16x8_t next = vsetq_lane_s16(3 * in_Near[i + 8] + in_Far[i + 8], nxt0, 7);
 
         // horizontal filter, polyphase implementation since it's convenient:
         // even pixels = 3*cur + prev = cur*4 + (prev - cur)
@@ -3801,17 +3801,17 @@ static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stb
 #endif
 
         // "previous" value for next iter
-        t1 = 3 * in_near[i + 7] + in_far[i + 7];
+        t1 = 3 * in_Near[i + 7] + in_Far[i + 7];
     }
 
     t0 = t1;
-    t1 = 3 * in_near[i] + in_far[i];
+    t1 = 3 * in_Near[i] + in_Far[i];
     out[i * 2] = stbi__div16(3 * t1 + t0 + 8);
 
     for (++i; i < w; ++i)
     {
         t0 = t1;
-        t1 = 3 * in_near[i] + in_far[i];
+        t1 = 3 * in_Near[i] + in_Far[i];
         out[i * 2 - 1] = stbi__div16(3 * t0 + t1 + 8);
         out[i * 2] = stbi__div16(3 * t1 + t0 + 8);
     }
@@ -3823,14 +3823,14 @@ static stbi_uc* stbi__resample_row_hv_2_simd(stbi_uc* out, stbi_uc* in_near, stb
 }
 #endif
 
-static stbi_uc* stbi__resample_row_generic(stbi_uc* out, stbi_uc* in_near, stbi_uc* in_far, int w, int hs)
+static stbi_uc* stbi__resample_row_generic(stbi_uc* out, stbi_uc* in_Near, stbi_uc* in_Far, int w, int hs)
 {
     // resample with nearest-neighbor
     int i, j;
-    STBI_NOTUSED(in_far);
+    STBI_NOTUSED(in_Far);
     for (i = 0; i < w; ++i)
         for (j = 0; j < hs; ++j)
-            out[i * hs + j] = in_near[i];
+            out[i * hs + j] = in_Near[i];
     return out;
 }
 
@@ -5956,24 +5956,24 @@ static void* stbi__bmp_load(stbi__context* s, int* x, int* y, int* comp, int req
     {
         // accept some number of extra bytes after the header, but if the offset points either to before
         // the header ends or implies a large amount of extra data, reject the file as malformed
-        int bytes_read_so_far = s->callback_already_read + (int)(s->img_buffer - s->img_buffer_original);
+        int bytes_read_so_Far = s->callback_already_read + (int)(s->img_buffer - s->img_buffer_original);
         int header_limit = 1024; // max we actually read is below 256 bytes currently.
         int extra_data_limit = 256 * 4; // what ordinarily goes here is a palette; 256 entries*4 bytes is its max size.
-        if (bytes_read_so_far <= 0 || bytes_read_so_far > header_limit)
+        if (bytes_read_so_Far <= 0 || bytes_read_so_Far > header_limit)
         {
             return stbi__errpuc("bad header", "Corrupt BMP");
         }
-        // we established that bytes_read_so_far is positive and sensible.
+        // we established that bytes_read_so_Far is positive and sensible.
         // the first half of this test rejects offsets that are either too small positives, or
-        // negative, and guarantees that info.offset >= bytes_read_so_far > 0. this in turn
+        // negative, and guarantees that info.offset >= bytes_read_so_Far > 0. this in turn
         // ensures the number computed in the second half of the test can't overflow.
-        if (info.offset < bytes_read_so_far || info.offset - bytes_read_so_far > extra_data_limit)
+        if (info.offset < bytes_read_so_Far || info.offset - bytes_read_so_Far > extra_data_limit)
         {
             return stbi__errpuc("bad offset", "Corrupt BMP");
         }
         else
         {
-            stbi__skip(s, info.offset - bytes_read_so_far);
+            stbi__skip(s, info.offset - bytes_read_so_Far);
         }
     }
 

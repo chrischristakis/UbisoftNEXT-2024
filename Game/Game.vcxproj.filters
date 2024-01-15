@@ -24,6 +24,8 @@
     <ClCompile Include="src\Math\Matrix_Transform.h" />
     <ClCompile Include="src\Math\Utils.cpp" />
     <ClCompile Include="src\Math\Matrix_Transform.cpp" />
+    <ClCompile Include="src\Graphics\Graphics.cpp" />
+    <ClCompile Include="src\Graphics\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\stdafx.h" />
@@ -56,6 +58,10 @@
     <ClInclude Include="src\Math\Matrix.h" />
     <ClInclude Include="src\Math\Utils.h" />
     <ClInclude Include="src\Math\Math.h" />
+    <ClInclude Include="src\Graphics\Primitive.h" />
+    <ClInclude Include="src\Graphics\Graphics.h" />
+    <ClInclude Include="src\Graphics\Mesh.h" />
+    <ClInclude Include="src\Graphics\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="stb_image">

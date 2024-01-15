@@ -21,6 +21,10 @@ public:
 		m_matrix[2][2] = identity;
 	}
 
+	static Mat3x3 Identity() {
+		return Mat3x3();
+	}
+
 	float &operator()(int r, int c) {
 		assert(r < 3 && r >= 0 && c < 3 && c >= 0);
 		return m_matrix[r][c];
@@ -68,6 +72,10 @@ public:
 		m_matrix[1][1] = identity;
 		m_matrix[2][2] = identity;
 		m_matrix[3][3] = identity;
+	}
+
+	static Mat4x4 Identity() {
+		return Mat4x4();
 	}
 
 	float &operator()(int r, int c) {

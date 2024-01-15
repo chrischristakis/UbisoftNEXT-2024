@@ -19,7 +19,27 @@ struct Vector3f {
 	Vector3f() : x(0), y(0), z(0) { }
 	Vector3f(float x, float y, float z) : x(x), y(y), z(z) { }
 
-	std::string to_string() {
+	Vector3f operator-(float scalar) const {
+		return Vector3f(x - scalar, y - scalar, z - scalar);
+	}
+
+	Vector3f operator-(const Vector3f& other) const {
+		return Vector3f(x - other.x, y - other.y, z - other.z);
+	}
+
+	Vector3f operator+(const Vector3f& other) const {
+		return Vector3f(x + other.x, y + other.y, z + other.z);
+	}
+
+	Vector3f operator/(float scalar) const {
+		return Vector3f(x / scalar, y / scalar, z / scalar);
+	}
+
+	Vector3f operator*(float scalar) const {
+		return Vector3f(x * scalar, y * scalar, z * scalar);
+	}
+
+	std::string to_string() const {
 		return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
 	}
 };
@@ -29,6 +49,7 @@ struct Vector4f {
 
 	Vector4f() : x(0), y(0), z(0), w(0) { }
 	Vector4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
+	Vector4f(const Vector3f& other, float w): x(other.x), y(other.y), z(other.z), w(w) {}
 
 	Vector4f operator+(const Vector3f& other) {
 		Vector4f res;
@@ -39,7 +60,7 @@ struct Vector4f {
 		return res;
 	}
 
-	std::string to_string() {
+	std::string to_string() const {
 		return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w);
 	}
 };
