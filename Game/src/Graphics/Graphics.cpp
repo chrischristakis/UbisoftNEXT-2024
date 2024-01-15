@@ -6,10 +6,9 @@
 #include "Graphics.h"
 #include "Primitive.h"
 
-Graphics::Graphics() {
+Graphics::Graphics(Camera* camera): _meshColor(1, 1, 1), _colorOverride(false), _camera(camera) {
 	float aspectRatio = (float)APP_VIRTUAL_WIDTH / APP_VIRTUAL_HEIGHT;
 	_projection = Transform::Perspective(45.0f, aspectRatio, _near, _far);
-	_cam = new Camera(Vector3f(0, 0, 30));
 }
 
 void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
@@ -17,21 +16,18 @@ void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
 	for (const Primitive& prim : mesh) {
 		PrimitiveAvgDepth processedPrim;
 
-		// Transform each polygon by the MVP matrix
 		float depthSum = 0.0f;
-		bool clipped = false;
+		bool clipped = false; // Immediate clipping for near and far planes
+		int numClipped = 0; // Number of individual clipped vertices;
+
+		// Transform each vertex in each primitive by the MVP matrix
 		for (const Vertex& vert : prim.vertices) {
 
-			Vector4f clipSpace = _projection * _cam->GetViewMatrix() * model * Vector4f(vert, 1.0f);
+			Vector4f clipSpace = _projection * _camera->GetViewMatrix() * model * Vector4f(vert, 1.0f);
 
-			// Before perspective division, we clip vertices. If -w <= x, y, z <= w, then valid.
-			// As an intentional choice, I divide the clip space x and y by some value, which gives some leeway out of
-			// the frustum before clipping. Otherwise, if a single vertex of the primitive is outside the frustum, then
-			// it will clip the entire thing. I do not do this for z since the leeway could result in graphics artifacts
-			// since the primitive might render upside down, as it extends beyond the near plane.
-			if (clipSpace.x*0.7f > clipSpace.w || clipSpace.x*0.7f < -clipSpace.w ||
-				clipSpace.y*0.7f > clipSpace.w || clipSpace.y*0.7f < -clipSpace.w ||
-				clipSpace.z > clipSpace.w || clipSpace.z < -clipSpace.w) {
+			// Before perspective division, we clip vertices. If -w <= z <= w, then valid.
+			// As an intentional choice, I only immediately clip z values beyond the near or far plane.
+			if (clipSpace.z > clipSpace.w || clipSpace.z < -clipSpace.w) {
 				clipped = true;
 				break;
 			}
@@ -55,19 +51,33 @@ void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
 			depthSum += screenSpaceVert.z;
 
 			processedPrim.PushVertex(screenSpaceVert);
+
+			// Track num of occurances of vertices that are off the screen.
+			if (screenSpaceVert.x > APP_VIRTUAL_WIDTH || screenSpaceVert.x < 0 ||
+				screenSpaceVert.y > APP_VIRTUAL_HEIGHT || screenSpaceVert.y < 0)
+				numClipped++;
 		}
 
 		processedPrim.depth = depthSum / prim.vertices.size();
-		processedPrim.color = prim.color;
 
-		// Discard clipped primitives
-		if(!clipped)
-			_processedPrims.emplace_back(processedPrim);
+		if (!_colorOverride)
+			processedPrim.color = prim.color;
+		else
+			processedPrim.color = _meshColor;
+
+		// Discard clipped primitives where 1 vert is beyond near and far plane (z), also discard
+		// primitives where ALL vertices lie beyond the screen bounds (x and y)
+		// This lets us have harsh z clipping the moment a vertex leaves the near and far plane,
+		// (To prevent visual artefacts)
+		// but more leeway for x and y clipping so that the primitive isnt clipped the moment
+		// a single vertex leaves the frustum.
+		if(!clipped && numClipped != prim.vertices.size())
+			_primsToRender.emplace_back(processedPrim);
 	}
 }
 
 void Graphics::SortOnDepth() {
-	std::sort(_processedPrims.begin(), _processedPrims.end(), 
+	std::sort(_primsToRender.begin(), _primsToRender.end(), 
 		[](const PrimitiveAvgDepth& a, const PrimitiveAvgDepth& b) {
 			return a.depth > b.depth;
 		}
@@ -75,16 +85,16 @@ void Graphics::SortOnDepth() {
 }
 
 void Graphics::Update() {
-	_cam->Update();
+	_camera->Update();
 }
   
 // Render everything we've collected and sorted.
 void Graphics::Flush() {
 	SortOnDepth();
 
-	App::Print(10.0f, 600.0f, std::to_string(_processedPrims.size()).c_str());
+	App::Print(10.0f, 600.0f, std::to_string(_primsToRender.size()).c_str());
 	int j = 0;
-	for (const PrimitiveAvgDepth& prim : _processedPrims) {
+	for (const PrimitiveAvgDepth& prim : _primsToRender) {
 		for (int i = 0; i < prim.vertices.size(); i++) {
 
 			const Vertex &v1 = prim.vertices[i];
@@ -93,5 +103,15 @@ void Graphics::Flush() {
 			App::DrawLine(v1.x, v1.y, v2.x, v2.y, prim.color.x, prim.color.y, prim.color.z);
 		}
 	}
-	_processedPrims.clear();
+	_primsToRender.clear();
+}
+
+void Graphics::SetColorOverride(bool val) {
+	_colorOverride = val;
+}
+
+void Graphics::SetMeshColor(float r, float g, float b) {
+	_meshColor.x = r;
+	_meshColor.y = g;
+	_meshColor.z = b;
 }

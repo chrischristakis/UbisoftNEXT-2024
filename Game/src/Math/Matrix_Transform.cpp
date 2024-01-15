@@ -25,6 +25,16 @@ Mat4x4 Transform::Translate(const Mat4x4& mat, const Vector3f& pos) {
 	return mat * res;
 }
 
+Mat4x4 Transform::Scale(const Mat4x4& mat, const Vector3f& scale) {
+	Mat4x4 res;
+
+	res(0, 0) = scale.x;
+	res(1, 1) = scale.y;
+	res(2, 2) = scale.z;
+
+	return mat * res;
+}
+
 Mat4x4 Transform::RotateX(const Mat4x4& mat, float degrees) {
 	Mat4x4 res;
 	float rad = Math::DegToRad(degrees);

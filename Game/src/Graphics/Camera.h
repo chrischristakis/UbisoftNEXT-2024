@@ -5,7 +5,7 @@
 class Camera {
 private:
 	Vector3f _up;
-	Vector3f _front;
+	Vector3f _lookDir;
 	Mat4x4 _lookAt;
 
 	void CalculateLookAt();
@@ -20,4 +20,7 @@ public:
 	void Update();
 
 	const Mat4x4& GetViewMatrix();
+
+	void SetLookDir(Vector3f);
+	void Move(Vector3f);
 };

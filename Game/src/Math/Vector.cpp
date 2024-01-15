@@ -1,6 +1,16 @@
 #include "stdafx.h"
 #include "Vector.h"
 
+// -------- VECTOR2F -------- //
+
+Vector2f::Vector2f() : x(0), y(0) { }
+Vector2f::Vector2f(float x, float y) : x(x), y(y) { }
+
+std::string Vector2f::to_string() const {
+	return std::to_string(x) + ", " + std::to_string(y);
+}
+
+
 // -------- VECTOR3F -------- //
 
 Vector3f::Vector3f() : x(0), y(0), z(0) { }

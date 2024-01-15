@@ -190,8 +190,9 @@
     <ClInclude Include="src\Math\Math.h" />
     <ClInclude Include="src\Math\Matrix.h" />
     <ClInclude Include="src\Math\Utils.h" />
-    <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Math\Vector.h" />
+    <ClInclude Include="src\Scene\Player.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="includes\App\app.cpp" />
@@ -209,12 +210,15 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="src\Graphics\Graphics.cpp" />
+    <ClCompile Include="src\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Graphics\Primitive.cpp" />
     <ClCompile Include="src\Math\Matrix.cpp" />
     <ClCompile Include="src\Math\Matrix_Transform.cpp" />
     <ClCompile Include="src\Math\Matrix_Transform.h" />
     <ClCompile Include="src\Math\Utils.cpp" />
     <ClCompile Include="src\Math\Vector.cpp" />
+    <ClCompile Include="src\Scene\Player.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

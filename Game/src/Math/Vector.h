@@ -2,6 +2,15 @@
 
 #include "stdafx.h"
 
+struct Vector2f {
+	float x, y;
+
+	Vector2f();
+	Vector2f(float x, float y);
+
+	std::string to_string() const;
+};
+
 struct Vector3f {
 	float x, y, z;
 

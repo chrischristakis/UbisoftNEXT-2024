@@ -10,6 +10,7 @@ struct Primitive {
 	Vector3f color;
 
 	Primitive();
+	Primitive(std::initializer_list<Vertex> verts);
 
 	void PushVertex(float x, float y, float z);
 	void PushVertex(Vertex v);

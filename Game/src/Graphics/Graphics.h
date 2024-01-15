@@ -11,15 +11,17 @@ struct PrimitiveAvgDepth: Primitive {
 
 class Graphics {
 private:
-	const float _near = 1.0f, _far = 100.0f;
-	std::vector<PrimitiveAvgDepth> _processedPrims;
+	const float _near = 0.1f, _far = 100.0f;
+	std::vector<PrimitiveAvgDepth> _primsToRender;
 	Mat4x4 _projection;
-	Camera* _cam;
+	Camera* _camera;
+
+	bool _colorOverride;  // Override Primitive colours with MeshColor when toggled on.
+	Vector3f _meshColor;
 
 	void SortOnDepth(); // Primitives with a higher depth value get drawn first.
 public:
-
-	Graphics();
+	Graphics(Camera* camera);
 
 	// Rendering a mesh simply applies the MVP to the primitive, then
 	// it stores them in a vector so we can order them due to the
@@ -27,4 +29,7 @@ public:
 	void RenderMesh(const Mesh& m, const Mat4x4& model);
 	void Update();
 	void Flush();
+
+	void SetColorOverride(bool);
+	void SetMeshColor(float r, float g, float b);
 };
