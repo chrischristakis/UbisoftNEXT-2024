@@ -83,3 +83,11 @@ Vector4f Mat4x4::operator*(const Vector4f & other) const {
 
 	return res;
 }
+
+bool Mat4x4::operator==(const Mat4x4& other) const {
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
+			if (m_matrix[i][j] != other.m_matrix[i][j])
+				return false;
+	return true;
+}

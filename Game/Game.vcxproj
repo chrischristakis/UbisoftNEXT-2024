@@ -183,6 +183,7 @@
     <ClInclude Include="includes\stb_image\stb_image.h" />
     <ClInclude Include="includes\stdafx.h" />
     <ClInclude Include="includes\targetver.h" />
+    <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
     <ClInclude Include="src\Graphics\Graphics.h" />
     <ClInclude Include="src\Graphics\Mesh.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="src\Math\Vector.h" />
     <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Tests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="includes\App\app.cpp" />
@@ -219,6 +221,7 @@
     <ClCompile Include="src\Math\Vector.cpp" />
     <ClCompile Include="src\Scene\Player.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
+    <ClCompile Include="src\Tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

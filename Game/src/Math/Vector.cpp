@@ -36,6 +36,10 @@ Vector3f Vector3f::operator*(float scalar) const {
 	return Vector3f(x * scalar, y * scalar, z * scalar);
 }
 
+bool Vector3f::operator==(const Vector3f& other) {
+	return x == other.x && y == other.y && z == other.z;
+}
+
 std::string Vector3f::to_string() const {
 	return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
 }

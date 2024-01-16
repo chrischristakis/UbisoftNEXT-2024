@@ -44,4 +44,5 @@ public:
 	float &operator()(int r, int c);
 	Mat4x4 operator*(const Mat4x4& other) const;
 	Vector4f operator*(const Vector4f& other) const;
+	bool operator==(const Mat4x4& other) const;
 };

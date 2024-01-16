@@ -12,8 +12,11 @@ Player::Player(Camera* camera) : _camera(camera), position(0, 1, 0) {
 void Player::Render(Graphics& context) {
 	Mat4x4 model = Transform::Translate(Mat4x4::Identity(), {position.x, position.y, position.z});
 	context.RenderMesh(Meshes::CUBE, model);
-	
-	//App::Print(10, 400, position.to_string().c_str());
+
+	Vector3f v1(2, -3, 1);
+	Vector3f v2(-2, 1, 1);
+
+	App::Print(10, 200, Math::Cross(v1, v2).to_string().c_str());
 }
 
 void Player::Update() {
@@ -31,5 +34,6 @@ void Player::ProcessInput() {
 	if (App::IsKeyPressed('D'))
 		position.x += 0.5f;
 
-	_camera->Move(position - oldPos);
+	_camera->SetLookDir(Math::Normalize(position - _camera->position));
+	//_camera->Move(position - oldPos);
 }
