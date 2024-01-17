@@ -6,7 +6,7 @@
 class Mat3x3 {
 private:
 
-	float m_matrix[3][3] = {
+	float _matrix[3][3] = {
 		{ 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f },
 		{ 0.0f, 0.0f, 1.0f },
@@ -27,7 +27,7 @@ public:
 class Mat4x4 {
 private:
 
-	float m_matrix[4][4] = {
+	float _matrix[4][4] = {
 		{ 1.0f, 0.0f, 0.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 1.0f, 0.0f },

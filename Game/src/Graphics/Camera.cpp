@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Camera.h"
-#include "../Math/Matrix_Transform.h"
+#include "../Math/Math.h"
 #include "App/App.h"
 
 Camera::Camera(): Camera(Vector3f(0, 0, 0)) { }

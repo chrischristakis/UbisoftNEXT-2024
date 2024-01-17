@@ -13,6 +13,6 @@ public:
 	Player(Camera* camera);
 
 	void Render(Graphics& context);
-	void Update();
+	void Update(float deltaTime);
 	void ProcessInput();
 };

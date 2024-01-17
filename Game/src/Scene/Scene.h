@@ -5,5 +5,5 @@ public:
 	Scene();
 	~Scene();
 	void Render();
-	void Update();
+	void Update(float deltaTime);
 };

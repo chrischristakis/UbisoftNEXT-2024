@@ -28,8 +28,8 @@ Scene::~Scene() {
 
 float x = 0, z = 0;
 float i = 0;
-void Scene::Update() {
-	player->Update();
+void Scene::Update(float deltaTime) {
+	player->Update(deltaTime);
 
 	context->Update();
 }
@@ -40,17 +40,13 @@ void Scene::Render() {
 
 	Mat4x4 model = Transform::RotateX(Mat4x4::Identity(), 90.0f);
 	model = Transform::Scale(model, { 10.0f, 10.0f, 1.0f });
-	context->SetColorOverride(true);
-	context->SetMeshColor(1, 0, 0);
-	context->RenderMesh(Meshes::QUAD, model);
+	context->RenderMesh(Meshes::QUAD, model, 1, 0, 0);
 	
 
 	model = Transform::Translate(Mat4x4::Identity(), { 5.0f, 3.0f, -6.0f });
 	model = Transform::RotateY(model, i);
 	model = Transform::Scale(model, { 1.0f, 3.0f, 1.0f });
-	context->SetMeshColor(0, 1, 0);
-	context->RenderMesh(Meshes::PYRAMID, model);
-	context->SetColorOverride(false);
+	context->RenderMesh(Meshes::CONE, model, 0, 1, 0);
 
 	context->Flush();
 }

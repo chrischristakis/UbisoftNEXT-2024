@@ -5,8 +5,15 @@
 #include "../Graphics/Mesh.h"
 #include "App/App.h"
 
+#include "ParticleEmitter.h"
+
+ParticleEmitter* pe;
+float last = 0.0f;
+
 Player::Player(Camera* camera) : _camera(camera), position(0, 1, 0) {
 	camera->SetLookDir(Math::Normalize(position - camera->position));
+
+	pe = new ParticleEmitter(10);
 }
 
 void Player::Render(Graphics& context) {
@@ -16,11 +23,29 @@ void Player::Render(Graphics& context) {
 	Vector3f v1(2, -3, 1);
 	Vector3f v2(-2, 1, 1);
 
-	App::Print(10, 200, Math::Cross(v1, v2).to_string().c_str());
+	pe->Render(context, Meshes::QUAD);
 }
 
-void Player::Update() {
+void Player::Update(float deltaTime) {
 	ProcessInput();
+
+	last += deltaTime;
+	if (last >= 5.0f) {
+		Vector3f randVel = { 
+			Math::RandomFloat(0.05f, 0.12f, true), 
+			Math::RandomFloat(0.05f, 0.12f, true), 
+			Math::RandomFloat(0.05f, 0.12f, true) 
+		};
+		Vector3f randCol = {
+			Math::RandomFloat(0.6f, 1.0f),
+			Math::RandomFloat(0.6f, 1.0f),
+			Math::RandomFloat(0.6f, 1.0f)
+		};
+		pe->Create(position, randVel, 1000.0f, Math::RandomFloat(0.1f, 0.23f), randCol);
+		last = 0.0f;
+	}
+
+	pe->Update(deltaTime);
 }
 
 void Player::ProcessInput() {

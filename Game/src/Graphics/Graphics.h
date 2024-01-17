@@ -16,10 +16,9 @@ private:
 	Mat4x4 _projection;
 	Camera* _camera;
 
-	bool _colorOverride;  // Override Primitive colours with MeshColor when toggled on.
-	Vector3f _meshColor;
-
 	void SortOnDepth(); // Primitives with a higher depth value get drawn first.
+
+	void _RenderMesh(const Mesh& m, const Mat4x4& model, bool useOverridenColor, const Vector3f& color);
 public:
 	Graphics(Camera* camera);
 
@@ -27,9 +26,9 @@ public:
 	// it stores them in a vector so we can order them due to the
 	// lack of a depth buffer, so we render furthest -> closest.
 	void RenderMesh(const Mesh& m, const Mat4x4& model);
+	void RenderMesh(const Mesh& mesh, const Mat4x4& model, const Vector3f& color);
+	void RenderMesh(const Mesh& mesh, const Mat4x4& model, float r, float g, float b);
+
 	void Update();
 	void Flush();
-
-	void SetColorOverride(bool);
-	void SetMeshColor(float r, float g, float b);
 };

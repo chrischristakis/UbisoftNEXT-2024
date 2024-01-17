@@ -1,5 +1,6 @@
 #include "stdafx.h"
-#include "Utils.h"
+#include "Util.h"
+#include "App/AppSettings.h"
 
 namespace Math {
 
@@ -28,4 +29,16 @@ namespace Math {
 		return Vector3f(x, y, z);
 	}
 
+	float RandomFloat(float min, float max, bool randomSign) {
+		if (max <= min)
+			return min;
+
+		float randAsAFloat = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+		float res = randAsAFloat * (max - min) + min;
+
+		if (randomSign && rand() % 2 == 0)
+			res *= -1;
+
+		return res;
+	}
 }

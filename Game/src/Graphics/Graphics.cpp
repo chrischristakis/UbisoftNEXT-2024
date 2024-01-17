@@ -1,17 +1,29 @@
 #include "stdafx.h"
 #include "App/AppSettings.h"
 #include "App/App.h"
-#include "../Math/Matrix_Transform.h"
+#include "../Math/MatrixTransform.h"
 #include "../Math/Vector.h"
 #include "Graphics.h"
 #include "Primitive.h"
 
-Graphics::Graphics(Camera* camera): _meshColor(1, 1, 1), _colorOverride(false), _camera(camera) {
+Graphics::Graphics(Camera* camera): _camera(camera) {
 	float aspectRatio = (float)APP_VIRTUAL_WIDTH / APP_VIRTUAL_HEIGHT;
 	_projection = Transform::Perspective(45.0f, aspectRatio, _near, _far);
 }
 
 void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
+	_RenderMesh(mesh, model, false, {0, 0, 0});
+}
+
+void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model, const Vector3f& color) {
+	_RenderMesh(mesh, model, true, color);
+}
+
+void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model, float r, float g, float b) {
+	_RenderMesh(mesh, model, true, { r, g, b });
+}
+
+void Graphics::_RenderMesh(const Mesh& mesh, const Mat4x4& model, bool useOverridenColor, const Vector3f& color) {
 	
 	for (const Primitive& prim : mesh) {
 		PrimitiveAvgDepth processedPrim;
@@ -32,6 +44,11 @@ void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
 				break;
 			}
 
+			// Track num of occurances of vertices that are off the screen.
+			if( clipSpace.x > clipSpace.w || clipSpace.x < -clipSpace.w ||
+				clipSpace.y > clipSpace.w || clipSpace.y < -clipSpace.w)
+				numClipped++;
+
 			Vertex clipSpaceVert{
 				clipSpace.x / clipSpace.w,
 				clipSpace.y / clipSpace.w,
@@ -50,20 +67,15 @@ void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
 
 			depthSum += screenSpaceVert.z;
 
-			processedPrim.PushVertex(screenSpaceVert);
-
-			// Track num of occurances of vertices that are off the screen.
-			if (screenSpaceVert.x > APP_VIRTUAL_WIDTH || screenSpaceVert.x < 0 ||
-				screenSpaceVert.y > APP_VIRTUAL_HEIGHT || screenSpaceVert.y < 0)
-				numClipped++;
+			processedPrim.PushVertex(screenSpaceVert);			
 		}
 
 		processedPrim.depth = depthSum / prim.vertices.size();
 
-		if (!_colorOverride)
+		if (!useOverridenColor)
 			processedPrim.color = prim.color;
 		else
-			processedPrim.color = _meshColor;
+			processedPrim.color = color;
 
 		// Discard clipped primitives where 1 vert is beyond near and far plane (z), also discard
 		// primitives where ALL vertices lie beyond the screen bounds (x and y)
@@ -104,14 +116,4 @@ void Graphics::Flush() {
 		}
 	}
 	_primsToRender.clear();
-}
-
-void Graphics::SetColorOverride(bool val) {
-	_colorOverride = val;
-}
-
-void Graphics::SetMeshColor(float r, float g, float b) {
-	_meshColor.x = r;
-	_meshColor.y = g;
-	_meshColor.z = b;
 }

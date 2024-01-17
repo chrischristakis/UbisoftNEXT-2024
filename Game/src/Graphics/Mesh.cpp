@@ -2,18 +2,22 @@
 
 #include "Mesh.h"
 #include "Primitive.h"
+#include "../Math/Util.h"
 
 // ------- HOISTS -------- //
 static Mesh GenerateCube();
 static Mesh GeneratePyramid();
+static Mesh GenerateCone(int);
 static Mesh GenerateQuad();
 
 // ------- EXTERN CONSTS ------- //
 const Mesh Meshes::CUBE = GenerateCube();
 const Mesh Meshes::PYRAMID = GeneratePyramid();
+const Mesh Meshes::CONE = GenerateCone(20);
 const Mesh Meshes::QUAD = GenerateQuad();
 
 // ------- GENERATORS ------- //
+// * Internal linkage
 
 static Mesh GenerateCube() {
 	Vertex tbl(-1, 1, -1);
@@ -47,6 +51,34 @@ static Mesh GeneratePyramid() {
 	Primitive back { br, bl, tip };
 
 	return { left, right, front, back };
+}
+
+static Mesh GenerateCone(int numBottomVerts) {
+
+	std::vector<Vertex> bottomVerts;
+
+	// Create base of the cone
+	float increment = 360.0f / numBottomVerts;
+	for (int i = 0; i < numBottomVerts; i++) {
+		float input = i * Math::DegToRad(increment);
+		Vertex v(cos(input), -1, sin(input));
+		bottomVerts.push_back(v);
+	}
+
+	// For a triangle between each bottom vert, its neighbour and the tip.
+	Vertex tip(0, 1, 0);
+	Mesh res;
+	for (int i = 0; i < bottomVerts.size(); i++) {
+		Primitive face;
+
+		face.PushVertex(bottomVerts[i]);
+		face.PushVertex(bottomVerts[(i + 1) % bottomVerts.size()]);
+		face.PushVertex(tip);
+
+		res.push_back(face);
+	}
+
+	return res;
 }
 
 static Mesh GenerateQuad() {
