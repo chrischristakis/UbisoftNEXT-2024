@@ -13,15 +13,12 @@ float last = 0.0f;
 Player::Player(Camera* camera) : _camera(camera), position(0, 1, 0) {
 	camera->SetLookDir(Math::Normalize(position - camera->position));
 
-	pe = new ParticleEmitter(5);
+	pe = new ParticleEmitter(50);
 }
 
 void Player::Render(Graphics& context) {
 	Mat4x4 model = Transform::Translate(Mat4x4::Identity(), {position.x, position.y, position.z});
 	context.RenderMesh(Meshes::CUBE, model);
-
-	Vector3f v1(2, -3, 1);
-	Vector3f v2(-2, 1, 1);
 
 	pe->Render(context, Meshes::QUAD);
 }
@@ -30,18 +27,24 @@ void Player::Update(float deltaTime) {
 	ProcessInput();
 
 	last += deltaTime;
-	if (last >= 500.0f) {
-		Vector3f randVel = { 
-			Math::RandomFloat(0.05f, 0.12f, true), 
-			Math::RandomFloat(0.05f, 0.12f, true), 
-			Math::RandomFloat(0.05f, 0.12f, true) 
+	if (last >= 10.0f) {
+		Vector3f randVel = {
+			Math::RandomFloat(0.05f, 0.09f, true),
+			Math::RandomFloat(0.05f, 0.09f, true),
+			Math::RandomFloat(0.05f, 0.09f, true)
 		};
 		Vector3f randCol = {
 			Math::RandomFloat(0.6f, 1.0f),
 			Math::RandomFloat(0.6f, 1.0f),
 			Math::RandomFloat(0.6f, 1.0f)
 		};
-		pe->Create(position, randVel, Math::RandomFloat(100.0f, 3000.0f), Math::RandomFloat(0.1f, 0.23f), randCol);
+		Vector3f randPos = {
+			Math::RandomFloat(position.x - 1.0f, position.x + 1.0f),
+			Math::RandomFloat(position.y - 1.0f, position.y + 1.0f),
+			Math::RandomFloat(position.z - 1.0f, position.z + 1.0f)
+		};
+		pe->Create(randPos, randVel, Math::RandomFloat(100.0f, 1000.0f), Math::RandomFloat(0.05f, 0.1f), randCol);
+
 		last = 0.0f;
 	}
 

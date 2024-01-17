@@ -9,6 +9,7 @@ public:
 	Vector3f position;
 	Vector3f color;
 	Vector3f velocity;
+	float initial_ttl;
 	float ttl; // Time to live in milliseconds
 	float scale;
 
@@ -17,6 +18,7 @@ public:
 			 float ttl = 0.0f,
 			 float scale = 1.0f,
 			 Vector3f color = { 1, 1, 1 });
+	Particle(const Particle&) = default;
 
 	bool Update(float deltaTime);  // Returns whether the particle is active.
 	void Render(Graphics& context, const Mesh& mesh);

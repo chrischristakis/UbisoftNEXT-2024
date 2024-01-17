@@ -16,7 +16,8 @@ Particle::Particle(Vector3f position,
 				   color(color), 	
 				   velocity(velocity), 
 				   ttl(ttl), 
-				   scale(scale) { }
+				   scale(scale),
+				   initial_ttl(ttl) { }
 
 bool Particle::Update(float deltaTime) {
 	position = position + velocity;
@@ -29,7 +30,7 @@ bool Particle::Update(float deltaTime) {
 void Particle::Render(Graphics& context, const Mesh& mesh) {
 	Mat4x4 model = Transform::Translate(Mat4x4::Identity(), position);
 	model = Transform::Scale(model, { scale, scale, scale });
-	context.RenderMesh(mesh, model, color);
+	context.RenderMesh(mesh, model, color * (ttl / initial_ttl));
 }
 
 // -------- PARTICLE EMITTER -------- //
@@ -57,6 +58,7 @@ void ParticleEmitter::Create(Vector3f position,
 	particle.color = color;
 	
 	particle.ttl = ttl;
+	particle.initial_ttl = ttl;
 	particle.scale = scale;
 }
 
