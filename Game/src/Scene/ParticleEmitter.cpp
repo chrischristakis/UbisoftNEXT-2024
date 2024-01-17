@@ -13,8 +13,7 @@ Particle::Particle(Vector3f position,
 				   Vector3f color) 
 				:
 				   position(position), 
-				   color(color), 
-				   active(false),	
+				   color(color), 	
 				   velocity(velocity), 
 				   ttl(ttl), 
 				   scale(scale) { }
@@ -23,10 +22,8 @@ bool Particle::Update(float deltaTime) {
 	position = position + velocity;
 
 	ttl -= deltaTime;
-	if (ttl <= 0)
-		active = false;
-
-	return active;
+	
+	return ttl > 0.0f;
 }
 
 void Particle::Render(Graphics& context, const Mesh& mesh) {
@@ -38,10 +35,9 @@ void Particle::Render(Graphics& context, const Mesh& mesh) {
 // -------- PARTICLE EMITTER -------- //
 
 ParticleEmitter::ParticleEmitter(int MAX_PARTICLES) {
-	for (int i = 0; i < MAX_PARTICLES; i++) {
+	for (int i = 0; i < MAX_PARTICLES; i++)
 		_particlePool.push_back(Particle({ 0, 0, 0 }));
-		_availableIndices.push(i);
-	}
+	_numActive = 0;
 }
 
 void ParticleEmitter::Create(Vector3f position,
@@ -49,29 +45,41 @@ void ParticleEmitter::Create(Vector3f position,
 							 float ttl,
 							 float scale,
 							 Vector3f color) {
-	Particle* particle = _GetAvailableParticle();
+	int index = _GetAvailableParticle();
 
-	if (!particle)
+	if (index == -1)
 		return; // If we can't keep up, just don't create anything.
 
-	particle->position = position;
-	particle->velocity = velocity;
-	particle->color = color;
-	
-	particle->ttl = ttl;
-	particle->scale = scale;
+	Particle& particle = _particlePool[index];
 
-	particle->active = true;
+	particle.position = position;
+	particle.velocity = velocity;
+	particle.color = color;
+	
+	particle.ttl = ttl;
+	particle.scale = scale;
 }
 
-// Use a queue to quickly access and check which particle we can use.
-Particle* ParticleEmitter::_GetAvailableParticle() {
-	if (_availableIndices.size() < 1)
-		return nullptr;
+// We keep particles that are active at the front of the pool,
+// so we can simply index.
+int ParticleEmitter::_GetAvailableParticle() {
+	
+	// No inactive particles available
+	if (_numActive == _particlePool.size())
+		return -1;
 
-	int index = _availableIndices.front();
-	_availableIndices.pop();
-	return &_particlePool[index];
+	return _numActive++;
+}
+
+// Particles in the pool that are inactive are contiguous starting from index = _numActive
+// This reduce cache misses by keeping all active particles together.
+void ParticleEmitter::_DestroyParticle(int index) {
+	assert(_numActive > 0);
+	
+	Particle lastActive = _particlePool[_numActive - 1];
+	_particlePool[_numActive - 1] = _particlePool[index];  // Moved to inactive half of vector
+	_particlePool[index] = lastActive;
+	_numActive--;
 }
 
 int ParticleEmitter::GetMaxParticles() {
@@ -79,17 +87,13 @@ int ParticleEmitter::GetMaxParticles() {
 }
 
 void ParticleEmitter::Update(float deltaTime) {
-	for (int i = 0; i < _particlePool.size(); i++)
-		if (_particlePool[i].active)
-			if (!_particlePool[i].Update(deltaTime))
-				_availableIndices.push(i);
+	for (int i = 0; i < _numActive; i++) {
+		if (!_particlePool[i].Update(deltaTime))
+			_DestroyParticle(i);
+	}
 }
 
 void ParticleEmitter::Render(Graphics& context, const Mesh& mesh) {
-	int rendered = 0;
-	for (Particle& particle : _particlePool)
-		if (particle.active) {
-			particle.Render(context, mesh);
-			rendered++;
-		}
+	for (int i = 0; i < _numActive; i++)
+		_particlePool[i].Render(context, mesh);
 }

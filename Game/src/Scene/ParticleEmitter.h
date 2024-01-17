@@ -11,11 +11,10 @@ public:
 	Vector3f velocity;
 	float ttl; // Time to live in milliseconds
 	float scale;
-	bool active;
 
 	Particle(Vector3f position,
 			 Vector3f velocity = {0, 0, 0},
-			 float ttl = 10000.0f,
+			 float ttl = 0.0f,
 			 float scale = 1.0f,
 			 Vector3f color = { 1, 1, 1 });
 
@@ -30,12 +29,11 @@ private:
 	// Populated with inactive particles at construction
 	std::vector<Particle> _particlePool;
 
-	// A vector that stores what indices in the particle
-	// pool are inactive and available for use
-	std::queue<int> _availableIndices;
+	int _numActive;
 
-	// Find an inactive particle in the pool for use
-	Particle* _GetAvailableParticle();
+	// Find an index for an inactive particle in the pool
+	int _GetAvailableParticle();
+	void _DestroyParticle(int index);
 
 public:
 
@@ -44,7 +42,7 @@ public:
 	// Prepare a particle for use
 	void Create(Vector3f position,
 				Vector3f velocity,
-				float ttl = 1000.0f,
+				float ttl = 0.0f,
 				float scale = 1.0f,
 				Vector3f color = {1, 1, 1});
 
