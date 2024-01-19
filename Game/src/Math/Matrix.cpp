@@ -1,46 +1,6 @@
 #include "stdafx.h"
 #include "Matrix.h"
 
-// -------- MAT3x3 -------- //
-
-Mat3x3::Mat3x3(float identity) {
-	_matrix[0][0] = identity;
-	_matrix[1][1] = identity;
-	_matrix[2][2] = identity;
-}
-
-Mat3x3 Mat3x3::Identity() {
-	return Mat3x3();
-}
-
-float& Mat3x3::operator()(int r, int c) {
-	assert(r < 3 && r >= 0 && c < 3 && c >= 0);
-	return _matrix[r][c];
-}
-
-Mat3x3 Mat3x3::operator*(const Mat3x3& other) const {
-	Mat3x3 res;
-
-	for (int i = 0; i < 3; ++i)
-		for (int j = 0; j < 3; ++j) {
-			res(i, j) = _matrix[i][0] * other._matrix[0][j] +
-				_matrix[i][1] * other._matrix[1][j] +
-				_matrix[i][2] * other._matrix[2][j];
-		}
-
-	return res;
-}
-
-Vector3f Mat3x3::operator*(const Vector3f& other) const {
-	Vector3f res;
-
-	res.x = _matrix[0][0] * other.x + _matrix[0][1] * other.y + _matrix[0][2] * other.z;
-	res.y = _matrix[1][0] * other.x + _matrix[1][1] * other.y + _matrix[1][2] * other.z;
-	res.z = _matrix[2][0] * other.x + _matrix[2][1] * other.y + _matrix[2][2] * other.z;
-
-	return res;
-}
-
 // -------- MAT4x4 -------- //
 
 Mat4x4::Mat4x4(float identity) {

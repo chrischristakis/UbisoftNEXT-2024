@@ -29,10 +29,11 @@
     <ClCompile Include="src\Graphics\Primitive.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Graphics\Mesh.cpp" />
-    <ClCompile Include="src\Scene\Player.cpp" />
     <ClCompile Include="src\Tests.cpp" />
-    <ClCompile Include="src\Scene\ParticleEmitter.cpp" />
+    <ClCompile Include="src\Graphics\ParticleEmitter.cpp" />
     <ClCompile Include="src\Math\MatrixTransform.cpp" />
+    <ClCompile Include="src\Scene\GameObjects\Player.cpp" />
+    <ClCompile Include="src\Scene\Components\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\stdafx.h" />
@@ -69,11 +70,14 @@
     <ClInclude Include="src\Graphics\Mesh.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
     <ClInclude Include="src\Scene\Scene.h" />
-    <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Tests.h" />
     <ClInclude Include="src\Config.h" />
-    <ClInclude Include="src\Scene\ParticleEmitter.h" />
+    <ClInclude Include="src\Graphics\ParticleEmitter.h" />
     <ClInclude Include="src\Math\MatrixTransform.h" />
+    <ClInclude Include="src\Scene\GameObjects\GameObject.h" />
+    <ClInclude Include="src\Scene\Components\Component.h" />
+    <ClInclude Include="src\Scene\Components\Transform.h" />
+    <ClInclude Include="src\Scene\GameObjects\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="stb_image">

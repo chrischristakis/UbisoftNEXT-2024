@@ -3,27 +3,6 @@
 #include "stdafx.h"
 #include "Vector.h"
 
-class Mat3x3 {
-private:
-
-	float _matrix[3][3] = {
-		{ 1.0f, 0.0f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f },
-		{ 0.0f, 0.0f, 1.0f },
-	};
-
-public:
-
-	Mat3x3() = default;
-	Mat3x3(float identity);
-
-	static Mat3x3 Identity();
-
-	float &operator()(int r, int c);
-	Mat3x3 operator*(const Mat3x3& other) const;
-	Vector3f operator*(const Vector3f& other) const;
-};
-
 class Mat4x4 {
 private:
 

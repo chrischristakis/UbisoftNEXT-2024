@@ -10,7 +10,7 @@ Camera::Camera(Vector3f pos, Vector3f up, Vector3f lookDir): position(pos), _up(
 }
 
 void Camera::CalculateLookAt() {
-	_lookAt = Transform::LookAt(position, position + _lookDir, _up);
+	_lookAt = Math::Transform::LookAt(position, position + _lookDir, _up);
 }
 
 void Camera::Update() {

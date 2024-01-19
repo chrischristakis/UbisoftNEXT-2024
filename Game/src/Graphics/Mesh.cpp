@@ -9,12 +9,14 @@ static Mesh GenerateCube();
 static Mesh GeneratePyramid();
 static Mesh GenerateCone(int);
 static Mesh GenerateQuad();
+static Mesh GenerateStar();
 
 // ------- EXTERN CONSTS ------- //
 const Mesh Meshes::CUBE = GenerateCube();
 const Mesh Meshes::PYRAMID = GeneratePyramid();
-const Mesh Meshes::CONE = GenerateCone(20);
+const Mesh Meshes::CONE = GenerateCone(7);
 const Mesh Meshes::QUAD = GenerateQuad();
+const Mesh Meshes::STAR = GenerateStar();
 
 // ------- GENERATORS ------- //
 // * Internal linkage
@@ -88,4 +90,16 @@ static Mesh GenerateQuad() {
 	Vertex bl(-1, -1, 0);
 
 	return { { tl, tr, br, bl } };
+}
+
+static Mesh GenerateStar() {
+	Primitive line1{ {{-1, 0, 0}, {1, 0, 0}} };
+	Primitive line2{ {{0, 0, -1}, {0, 0, 1}} };
+	Primitive line3{ {{0, -1, 0}, {0, 1, 0}} };
+	Primitive line4{ {{-0.5f, -0.5f, -0.5f}, {0.5f, 0.5f, 0.5f}} };
+	Primitive line5{ {{-0.5f, -0.5f, 0.5f}, {0.5f, 0.5f, -0.5f}} };
+	Primitive line6{ {{0.5f, -0.5f, -0.5f}, {-0.5f, 0.5f, 0.5f}} };
+	Primitive line7{ {{-0.5f, 0.5f, -0.5f}, {0.5f, -0.5f, 0.5f}} };
+
+	return { line1, line2, line3, line4, line5, line6, line7 };
 }

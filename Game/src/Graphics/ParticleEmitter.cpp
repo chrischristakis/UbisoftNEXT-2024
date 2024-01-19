@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "ParticleEmitter.h"
-#include "../Graphics/Mesh.h"
+#include "Mesh.h"
 #include "app/app.h"
 
 // -------- PARTICLE -------- //
@@ -28,10 +28,11 @@ bool Particle::Update(float deltaTime) {
 }
 
 void Particle::Render(Graphics& context, const Mesh& mesh) {
-	Mat4x4 model = Transform::Translate(Mat4x4::Identity(), position);
-	model = Transform::Scale(model, { scale, scale, scale });
+	Mat4x4 model = Math::Transform::Translate(Mat4x4::Identity(), position);
+	model = Math::Transform::Scale(model, { scale, scale, scale });
 	context.RenderMesh(mesh, model, color * (ttl / initial_ttl));
 }
+
 
 // -------- PARTICLE EMITTER -------- //
 

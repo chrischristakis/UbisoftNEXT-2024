@@ -1,8 +1,8 @@
 #pragma once
 
-#include <queue>
+#include "stdafx.h"
 #include "../Math/Math.h"
-#include "../Graphics/Graphics.h"
+#include "Graphics.h"
 
 struct Particle {
 public:

@@ -13,4 +13,5 @@ namespace Meshes {
 	extern const Mesh PYRAMID;
 	extern const Mesh CONE;
 	extern const Mesh QUAD;
+	extern const Mesh STAR;
 }

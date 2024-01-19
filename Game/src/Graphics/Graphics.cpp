@@ -8,7 +8,7 @@
 
 Graphics::Graphics(Camera* camera): _camera(camera) {
 	float aspectRatio = (float)APP_VIRTUAL_WIDTH / APP_VIRTUAL_HEIGHT;
-	_projection = Transform::Perspective(45.0f, aspectRatio, _near, _far);
+	_projection = Math::Transform::Perspective(45.0f, aspectRatio, _near, _far);
 }
 
 void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {

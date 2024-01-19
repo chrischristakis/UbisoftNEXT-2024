@@ -193,8 +193,11 @@
     <ClInclude Include="src\Math\MatrixTransform.h" />
     <ClInclude Include="src\Math\Util.h" />
     <ClInclude Include="src\Math\Vector.h" />
-    <ClInclude Include="src\Scene\ParticleEmitter.h" />
-    <ClInclude Include="src\Scene\Player.h" />
+    <ClInclude Include="src\Scene\Components\Component.h" />
+    <ClInclude Include="src\Scene\Components\Transform.h" />
+    <ClInclude Include="src\Scene\GameObjects\GameObject.h" />
+    <ClInclude Include="src\Scene\GameObjects\Player.h" />
+    <ClInclude Include="src\Graphics\ParticleEmitter.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Tests.h" />
   </ItemGroup>
@@ -220,8 +223,9 @@
     <ClCompile Include="src\Math\MatrixTransform.cpp" />
     <ClCompile Include="src\Math\Util.cpp" />
     <ClCompile Include="src\Math\Vector.cpp" />
-    <ClCompile Include="src\Scene\ParticleEmitter.cpp" />
-    <ClCompile Include="src\Scene\Player.cpp" />
+    <ClCompile Include="src\Scene\Components\Transform.cpp" />
+    <ClCompile Include="src\Scene\GameObjects\Player.cpp" />
+    <ClCompile Include="src\Graphics\ParticleEmitter.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Tests.cpp" />
   </ItemGroup>
