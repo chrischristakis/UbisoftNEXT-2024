@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Util.h"
 #include "App/AppSettings.h"
+#include "../Constants.h"
+#include "../Graphics/Camera.h"
 
 namespace Math {
 

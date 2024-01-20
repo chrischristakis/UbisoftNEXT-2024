@@ -34,6 +34,9 @@
     <ClCompile Include="src\Math\MatrixTransform.cpp" />
     <ClCompile Include="src\Scene\GameObjects\Player.cpp" />
     <ClCompile Include="src\Scene\Components\Transform.cpp" />
+    <ClCompile Include="src\Scene\GameObjects\Platform.cpp" />
+    <ClCompile Include="src\Scene\Components\Physics.cpp" />
+    <ClCompile Include="src\Scene\Components\Box2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\stdafx.h" />
@@ -78,6 +81,10 @@
     <ClInclude Include="src\Scene\Components\Component.h" />
     <ClInclude Include="src\Scene\Components\Transform.h" />
     <ClInclude Include="src\Scene\GameObjects\Player.h" />
+    <ClInclude Include="src\Constants.h" />
+    <ClInclude Include="src\Scene\GameObjects\Platform.h" />
+    <ClInclude Include="src\Scene\Components\Physics.h" />
+    <ClInclude Include="src\Scene\Components\Box2D.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="stb_image">

@@ -9,13 +9,17 @@ Camera::Camera(Vector3f pos, Vector3f up, Vector3f lookDir): position(pos), _up(
 	CalculateLookAt();
 }
 
-void Camera::CalculateLookAt() {
-	_lookAt = Math::Transform::LookAt(position, position + _lookDir, _up);
+Mat4x4 Camera::CalculateLookAt() {
+	return Math::Transform::LookAt(position, position + _lookDir, _up);
+}
+
+Mat4x4 Camera::CalculateInverseLookAt() {
+	return Math::Transform::InverseLookAt(position, position + _lookDir, _up);
 }
 
 void Camera::Update() {
 	//ProcessInput();
-	CalculateLookAt();
+	_lookAt = CalculateLookAt();
 }
 
 const Mat4x4& Camera::GetViewMatrix() {

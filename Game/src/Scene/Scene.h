@@ -6,4 +6,5 @@ public:
 	~Scene();
 	void Render();
 	void Update(float deltaTime);
+	void DoCollisions();
 };

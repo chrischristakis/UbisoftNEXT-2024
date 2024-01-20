@@ -17,6 +17,7 @@ namespace Math {
 		Mat4x4 RotateZ(const Mat4x4& mat, float degrees);
 
 		Mat4x4 LookAt(Vector3f position, Vector3f forward, Vector3f up);
+		Mat4x4 InverseLookAt(Vector3f pos, Vector3f target, Vector3f tempUp);
 
 	}
 }

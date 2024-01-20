@@ -100,5 +100,31 @@ namespace Math {
 			return res;
 		}
 
+		// The transpose of the rotation matrix with an inverse translation using the camera's position.
+		Mat4x4 InverseLookAt(Vector3f pos, Vector3f target, Vector3f tempUp) {
+			Mat4x4 res;
+
+			Vector3f forward = Math::Normalize(pos - target);
+			Vector3f right = Math::Normalize(Math::Cross(tempUp, forward));
+			Vector3f up = Math::Normalize(Math::Cross(forward, right));
+
+			res(0, 0) = right.x;
+			res(0, 1) = up.x;
+			res(0, 2) = forward.x;
+			res(0, 3) = pos.x;
+
+			res(1, 0) = right.y;
+			res(1, 1) = up.y;
+			res(1, 2) = forward.y;
+			res(1, 3) = pos.y;
+
+			res(2, 0) = right.z;
+			res(2, 1) = up.z;
+			res(2, 2) = forward.z;
+			res(2, 3) = pos.z;
+
+			return res;
+		}
+
 	}
 }

@@ -5,11 +5,13 @@
 #include "../../Graphics/Graphics.h"
 #include "../Components/Component.h"
 
+// Generic, derivable GameObject class which manages its components.
 class GameObject {
 private:
 	std::unordered_map<std::string, std::unique_ptr<Component::Component>> _components;
 public:
 	virtual void Update(float deltaTime) { }
+	virtual void LateUpdate(float deltaTime) { }  // Used to apply transformations after checking collisions
 	virtual void Render(Graphics& context) { }
 
 	template <class T>

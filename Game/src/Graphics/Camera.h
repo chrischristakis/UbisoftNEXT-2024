@@ -8,7 +8,6 @@ private:
 	Vector3f _lookDir;
 	Mat4x4 _lookAt;
 
-	void CalculateLookAt();
 	void ProcessInput();  // If you want keyboard control of the camera, do it here.
 public:
 	Vector3f position;
@@ -23,4 +22,7 @@ public:
 
 	void SetLookDir(Vector3f);
 	void Move(Vector3f);
+
+	Mat4x4 CalculateLookAt();
+	Mat4x4 CalculateInverseLookAt();
 };

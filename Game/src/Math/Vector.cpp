@@ -5,15 +5,45 @@
 
 Vector2f::Vector2f() : x(0), y(0) { }
 Vector2f::Vector2f(float x, float y) : x(x), y(y) { }
+Vector2f::Vector2f(const Vector3f& v) {
+	x = v.x;
+	y = v.y;
+}
+
+Vector2f Vector2f::operator-(const Vector2f& other) const {
+	return Vector2f(x - other.x, y - other.y);
+}
+Vector2f Vector2f::operator+(const Vector2f& other) const {
+	return Vector2f(x + other.x, y + other.y);
+}
+Vector2f Vector2f::operator/(const Vector2f& other) const {
+	return Vector2f(x / other.x, y / other.y);
+}
+Vector2f Vector2f::operator*(const Vector2f& other) const {
+	return Vector2f(x * other.x, y * other.y);
+}
+Vector2f Vector2f::operator/(float scalar) const {
+	return Vector2f(x / scalar, y / scalar);
+}
+Vector2f Vector2f::operator*(float scalar) const {
+	return Vector2f(x * scalar, y * scalar);
+}
+Vector2f Vector2f::operator+(float scalar) const {
+	return Vector2f(x + scalar, y + scalar);
+}
 
 std::string Vector2f::to_string() const {
 	return std::to_string(x) + ", " + std::to_string(y);
 }
 
-
 // -------- VECTOR3F -------- //
 
 Vector3f::Vector3f() : x(0), y(0), z(0) { }
+Vector3f::Vector3f(Vector2f v, float z) { 
+	x = v.x;
+	y = v.y;
+	this->z = z;
+}
 Vector3f::Vector3f(float x, float y, float z) : x(x), y(y), z(z) { }
 
 Vector3f Vector3f::operator-(float scalar) const {

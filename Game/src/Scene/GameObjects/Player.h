@@ -8,12 +8,18 @@
 class Player : public GameObject {
 private:
 	Camera* _camera;
-	ParticleEmitter* _emitter;
 
-	void _ProcessInput(Component::Transform& transform);
 public:
-	Player(Vector3f position, Camera* camera, ParticleEmitter* emitter);
+	Vector3f cursorPos;
+
+	Player(Vector3f position, Camera* camera);
 
 	void Update(float deltaTime) override;
+	void LateUpdate(float deltaTime) override;
 	void Render(Graphics& context) override;
+	void RenderAimLine(Graphics& context); // renders out the line that indicates where they player is aiming
+
+	void UpdateCursorPos();
+	void ProcessInput();
+
 };

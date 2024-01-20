@@ -11,7 +11,6 @@ struct PrimitiveAvgDepth: Primitive {
 
 class Graphics {
 private:
-	const float _near = 0.1f, _far = 100.0f;
 	std::vector<PrimitiveAvgDepth> _primsToRender;
 	Mat4x4 _projection;
 	Camera* _camera;
@@ -28,6 +27,7 @@ public:
 	void RenderMesh(const Mesh& m, const Mat4x4& model);
 	void RenderMesh(const Mesh& mesh, const Mat4x4& model, const Vector3f& color);
 	void RenderMesh(const Mesh& mesh, const Mat4x4& model, float r, float g, float b);
+	void RenderLine(Vector3f p1, Vector3f p2, Vector3f color);
 
 	void Update();
 	void Flush();

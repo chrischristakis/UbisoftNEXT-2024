@@ -5,10 +5,22 @@
 #include "../Math/Vector.h"
 #include "Graphics.h"
 #include "Primitive.h"
+#include "../Constants.h"
 
 Graphics::Graphics(Camera* camera): _camera(camera) {
 	float aspectRatio = (float)APP_VIRTUAL_WIDTH / APP_VIRTUAL_HEIGHT;
-	_projection = Math::Transform::Perspective(45.0f, aspectRatio, _near, _far);
+	_projection = Math::Transform::Perspective(Constants::FOV, aspectRatio, Constants::NEAR_PLANE, Constants::FAR_PLANE);
+}
+
+void Graphics::RenderLine(Vector3f p1, Vector3f p2, Vector3f color) {
+	Primitive line;
+	line.PushVertex(p1);
+	line.PushVertex(p2);
+
+	Mesh lineMesh;
+	lineMesh.push_back(line);
+
+	_RenderMesh(lineMesh, Mat4x4::Identity(), false, color);
 }
 
 void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model) {
@@ -104,8 +116,6 @@ void Graphics::Update() {
 void Graphics::Flush() {
 	SortOnDepth();
 
-	App::Print(10.0f, 600.0f, std::to_string(_primsToRender.size()).c_str());
-	int j = 0;
 	for (const PrimitiveAvgDepth& prim : _primsToRender) {
 		for (int i = 0; i < prim.vertices.size(); i++) {
 

@@ -12,17 +12,23 @@
 
 #include "../Math/Math.h"
 #include "GameObjects/Player.h"
+#include "GameObjects/Platform.h"
+
+#include "Components/Box2D.h"
+#include "Components/Physics.h"
 
 Camera* camera;
 Graphics* context;
 Player* player;
+Platform* platform;
 ParticleEmitter* emitter;
 
 Scene::Scene() {
-	camera = new Camera(Vector3f(0, 14, 16));
+	camera = new Camera(Vector3f(0, 10, 10));
 	context = new Graphics(camera);
 	emitter = new ParticleEmitter(100);
-	player = new Player({0, 1, 0}, camera, emitter);
+	player = new Player({0, 1.0f, 0}, camera);
+	platform = new Platform({ 0, 0, 0 }, {10.0f, 1.0f, 10.0f});
 }
 
 Scene::~Scene() {
@@ -30,29 +36,44 @@ Scene::~Scene() {
 	delete camera;
 	delete player;
 	delete emitter;
+	delete platform;
 }
 
-float i = 0;
 void Scene::Update(float deltaTime) {
+	
+	// Pre collision updates
 	player->Update(deltaTime);
 	emitter->Update(deltaTime);
+
+	DoCollisions();
+
+	// Post collision updates
+	player->LateUpdate(deltaTime);
 
 	camera->Update();
 	context->Update(); // Sorts everything that needs to be rendered
 }
 
-void Scene::Render() {
-	i += 0.5f;
-	player->Render(*context);
+void Scene::DoCollisions() {
+	/*
+	Component::BoxCollider& c1 = *player->GetComponent<Component::BoxCollider>();
+	Component::BoxCollider& c2 = *platform->GetComponent<Component::BoxCollider>();
 
-	Mat4x4 model = Math::Transform::RotateX(Mat4x4::Identity(), 90.0f);
-	model = Math::Transform::Scale(model, { 10.0f, 10.0f, 1.0f });
-	context->RenderMesh(Meshes::QUAD, model, 1, 0, 0);
-	
-	model = Math::Transform::Translate(Mat4x4::Identity(), { 5.0f, 3.0f, -6.0f });
-	model = Math::Transform::RotateY(model, i);
-	model = Math::Transform::Scale(model, { 1.0f, 3.0f, 1.0f });
-	context->RenderMesh(Meshes::CONE, model, 0, 1, 0);
+	Component::Physics& physics = *player->GetComponent<Component::Physics>();
+	Vector3f oldPos = c1.position;
+	c1.position = c1.position + physics.velocity;
+
+	if (c1.CollidesWith(c2)) {
+		debug = "collided!";
+	}
+	else
+		debug = "";
+	*/
+}
+
+void Scene::Render() {
+	player->Render(*context);
+	platform->Render(*context);
 
 	// Output rendered frame
 	context->Flush();
