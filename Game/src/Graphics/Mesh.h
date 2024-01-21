@@ -14,4 +14,5 @@ namespace Meshes {
 	extern const Mesh CONE;
 	extern const Mesh QUAD;
 	extern const Mesh STAR;
+	extern const Mesh SHIP;
 }

@@ -17,7 +17,7 @@ private:
 
 	void SortOnDepth(); // Primitives with a higher depth value get drawn first.
 
-	void _RenderMesh(const Mesh& m, const Mat4x4& model, bool useOverridenColor, const Vector3f& color);
+	void _RenderMesh(const Mesh& m, const Mat4x4& model, bool useOverridenColor, const Vector3f& color, bool clipping=true);
 public:
 	Graphics(Camera* camera);
 
@@ -27,6 +27,7 @@ public:
 	void RenderMesh(const Mesh& m, const Mat4x4& model);
 	void RenderMesh(const Mesh& mesh, const Mat4x4& model, const Vector3f& color);
 	void RenderMesh(const Mesh& mesh, const Mat4x4& model, float r, float g, float b);
+	void RenderUnclippedMesh(const Mesh& mesh, const Mat4x4& model, const Vector3f& color);
 	void RenderLine(Vector3f p1, Vector3f p2, Vector3f color);
 
 	void Update();

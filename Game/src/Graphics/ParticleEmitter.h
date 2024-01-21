@@ -8,12 +8,14 @@ struct Particle {
 public:
 	Vector3f position;
 	Vector3f color;
+	const Mesh* mesh;
 	Vector3f velocity;
 	float initial_ttl;
 	float ttl; // Time to live in milliseconds
 	float scale;
 
 	Particle(Vector3f position,
+			 const Mesh* mesh,
 			 Vector3f velocity = {0, 0, 0},
 			 float ttl = 0.0f,
 			 float scale = 1.0f,
@@ -21,7 +23,7 @@ public:
 	Particle(const Particle&) = default;
 
 	bool Update(float deltaTime);  // Returns whether the particle is active.
-	void Render(Graphics& context, const Mesh& mesh);
+	void Render(Graphics& context);
 };
 
 // Particle Emitter uses object pooling to reduce fragmentation between particle instances
@@ -42,14 +44,12 @@ public:
 	ParticleEmitter(int MAX_PARTICLES);
 
 	// Prepare a particle for use
-	void Create(Vector3f position,
-				Vector3f velocity,
-				float ttl = 0.0f,
-				float scale = 1.0f,
-				Vector3f color = {1, 1, 1});
+	void Create(Particle p);
 
 	int GetMaxParticles();
 
 	void Update(float deltaTime);
-	void Render(Graphics& context, const Mesh&);
+	void Render(Graphics& context);
+
+	void Clear();
 };

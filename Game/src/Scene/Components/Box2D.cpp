@@ -13,12 +13,10 @@ namespace Component {
 
 	void Box2D::SyncPositionWithTransform(Transform& transform) {
 		this->position.x = transform.position.x - size.x / 2.0f;
-		this->position.y = transform.position.y - size.y / 2.0f + 5.0f;
+		this->position.y = transform.position.y - size.y / 2.0f;
 	}
 
-	bool Box2D::CollidesWithRay(const Vector2f& rayOrigin, const Vector2f& rayDir,
-		Vector2f& contactPoint, Vector2f& contactNormal, float& timeToHitNear) 
-	{
+	bool Box2D::CollidesWithRay(const Vector2f& rayOrigin, const Vector2f& rayDir, Vector2f& contactPoint, Vector2f& contactNormal, float& timeToHitNear) const {
 		// The 'time' for the paramatized vector until the collision with the Box2D
 		Vector2f tNear = (position - rayOrigin) / rayDir;
 		Vector2f tFar = (position + size - rayOrigin) / rayDir;
@@ -48,7 +46,7 @@ namespace Component {
 		if (timeToHitFar < 0) 
 			return false;
 
-		contactPoint = (rayOrigin + timeToHitNear) * rayDir;
+		contactPoint = rayOrigin + (rayDir * timeToHitNear);
 
 		// Return the proper normal depending on our 
 		if (tNear.x > tNear.y)

@@ -18,8 +18,21 @@ namespace Math {
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
 
+	float Dot(const Vector2f& v1, const Vector2f& v2) {
+		return v1.x * v2.x + v1.y * v2.y;
+	}
+
+	float Distance(const Vector2f& v) {
+		return sqrt(v.x * v.x + v.y * v.y);
+	}
+
 	Vector3f Normalize(const Vector3f& v) {
 		float magnitude = sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+		return v / magnitude;
+	}
+
+	Vector2f Normalize(const Vector2f& v) {
+		float magnitude = sqrt(v.x * v.x + v.y * v.y);
 		return v / magnitude;
 	}
 

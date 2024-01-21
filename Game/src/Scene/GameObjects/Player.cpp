@@ -3,67 +3,94 @@
 #include "Player.h"
 #include "../../Math/Math.h"
 #include "../Components/Transform.h"
-#include "../Components/Box2D.h"
 #include "../Components/Physics.h"
 #include "App/App.h"
 #include "../../Constants.h"
 
-Player::Player(Vector3f position, Camera* camera):
-	_camera(camera), cursorPos({0, 0, 0}) 
+Player::Player(Vector2f position, Camera* camera, ParticleEmitter* emitter, BulletPool* bulletpool):
+	_camera(camera), _bulletPool(bulletpool), _emitter(emitter), cursorPos({0, 0, 0}), _bulletCooldownTimer(0)
 {
-	CreateComponent<Component::Transform>(Component::Transform(position, {0.5f, 1.0f, 0.5f}));
-	CreateComponent<Component::Box2D>(Component::Box2D(Vector2f(position), Vector2f(0.5f, 1.0f)));
-	CreateComponent<Component::Physics>(Component::Physics());
+	Component::Transform& transform = *CreateComponent<Component::Transform>(Component::Transform(Vector3f(position, 1.0f), {0.5f, 1.0f, 0.5f}));
+	CreateComponent<Component::Physics>(Component::Physics(Vector2f(), Vector2f(0.98f, 0.98f)));
 
-	camera->SetLookDir(Math::Normalize(position - camera->position));
+	_camera->SetLookDir(Math::Normalize(transform.position - _camera->position));
+
+	_initialPos = position;
 }
+
+void Player::Reset() {
+	Component::Transform& transform = *GetComponent<Component::Transform>();
+	Component::Physics& physics = *GetComponent<Component::Physics>();
+
+	_bulletCooldownTimer = 0;
+	transform.position = Vector3f(_initialPos, 0.0f);
+	physics.velocity = Vector2f(0, 0);
+	_camera->SetLookDir(Math::Normalize(transform.position - _camera->position));
+}
+
 
 void Player::Render(Graphics& context) {
 	Component::Transform& transform = *GetComponent<Component::Transform>();
-	Component::Box2D& collider = *GetComponent<Component::Box2D>();
 
-	Vector2f cp, cn;
-	float t;
-	if(collider.CollidesWithRay(Vector2f(transform.position),
-								Vector2f(cursorPos - transform.position),
-								cp, cn, t) && t < 1.0f)
-		collider.Render(context, transform.position.z, {1, 1, 0});
-	else
-		collider.Render(context, transform.position.z);
-
-	context.RenderMesh(Meshes::CUBE, transform.CreateModelMatrix());
+	context.RenderMesh(Meshes::SHIP, transform.CreateModelMatrix(), {0, 1, 1});
 	RenderAimLine(context);
 }
 
 void Player::Update(float deltaTime) {
-	Component::Transform& transform = *GetComponent<Component::Transform>();
-
 	ProcessInput();
-}
 
-void Player::LateUpdate(float deltaTime) {
+	if(_bulletCooldownTimer > 0.0f)
+		_bulletCooldownTimer -= deltaTime;
+
 	Component::Transform& transform = *GetComponent<Component::Transform>();
 	Component::Physics& physics = *GetComponent<Component::Physics>();
-	Component::Box2D& collider = *GetComponent<Component::Box2D>();
 
-	transform.position = transform.position + physics.velocity;
-
-	collider.SyncPositionWithTransform(transform);
+	physics.velocity = physics.velocity * physics.acceleration;
+	transform.position = transform.position + Vector3f(physics.velocity, 0.0f) * deltaTime;
 
 	_camera->SetLookDir(Math::Normalize(transform.position - _camera->position));
 	UpdateCursorPos();
 }
 
 void Player::ProcessInput() {
+	if (App::IsKeyPressed(VK_LBUTTON) && _bulletCooldownTimer <= 0.0f)
+		FireBullet();
+}
+
+void Player::FireBullet() {
+	Component::Transform& transform = *GetComponent<Component::Transform>();
 	Component::Physics& physics = *GetComponent<Component::Physics>();
 
-	Vector3f velocity;
-	if (App::IsKeyPressed('A'))
-		velocity.x -= 0.5f;
-	if (App::IsKeyPressed('D'))
-		velocity.x += 0.5f;
+	Vector2f cursorDir = Math::Normalize(Vector2f(cursorPos) - Vector2f(transform.position));
 
-	physics.velocity = velocity;
+	float bulletSpeed = 8.5f;
+	Vector2f bulletVel = cursorDir * bulletSpeed;
+
+	// knock back the ship with recoil
+	physics.velocity = physics.velocity - bulletVel;
+
+	// Spawn a bullet infront of the player
+	Projectile p({ Vector2f(transform.position) }, bulletVel, 2.0f, false);
+	_bulletPool->CreateBullet(p);
+
+	// Spawn some particles
+	for (int i = 0; i < 10; i++) {
+		float amplitude = 0.3f;
+		Vector3f randPos{
+			Math::RandomFloat(transform.position.x - amplitude, transform.position.x + amplitude),
+			Math::RandomFloat(transform.position.y - amplitude, transform.position.y + amplitude),
+			Math::RandomFloat(transform.position.z - amplitude, transform.position.z + amplitude),
+		};
+		Vector3f randVel{
+			Math::RandomFloat(-0.5f, 0.5f),
+			Math::RandomFloat(-0.5f, 0.5f),
+			Math::RandomFloat(-0.5f, 0.5f),
+		};
+		_emitter->Create(Particle{ randPos, &Meshes::STAR, randVel, 1.0f, 0.2f, {0.5f, 0.5f, 0.5f} });
+	}
+
+	// Reset the cooldown
+	_bulletCooldownTimer = BULLET_COOLDOWN;
 }
 
 void Player::UpdateCursorPos() {
@@ -97,6 +124,15 @@ void Player::UpdateCursorPos() {
 	float magnitude = (transform.position.z - rayPos.z) / rayDir.z;
 	cursorPos = _camera->position + rayDir * magnitude;
 	cursorPos.z = transform.position.z;
+
+	// Also update the rotation of the player
+	Vector2f cursorDir = Math::Normalize(Vector2f(cursorPos) - Vector2f(transform.position));
+	float num = Math::Dot(cursorDir, Vector2f(0, 1));
+	float dem = Math::Distance(cursorDir);
+	float angle = Math::RadToDeg(acos(num / dem));
+	if (cursorDir.x > 0)
+		angle = -angle;
+	transform.rotation.z = angle;
 }
 
 void Player::RenderAimLine(Graphics& context) {
@@ -113,6 +149,7 @@ void Player::RenderAimLine(Graphics& context) {
 	lineMesh.push_back(line);
 
 	Mat4x4 model = Math::Transform::Translate(Mat4x4::Identity(), cursorPos);
-	context.RenderMesh(Meshes::QUAD, model, { 1, 0, 0 });
-	context.RenderMesh(lineMesh, Mat4x4::Identity(), {1, 0, 0});
+	model = Math::Transform::Scale(model, { 0.1f, 0.1f, 0.1f });
+	context.RenderMesh(Meshes::QUAD, model, { 1, 1, 1 });
+	context.RenderMesh(lineMesh, Mat4x4::Identity(), {1, 1, 1});
 }

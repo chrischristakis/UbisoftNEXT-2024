@@ -10,11 +10,13 @@ static Mesh GeneratePyramid();
 static Mesh GenerateCone(int);
 static Mesh GenerateQuad();
 static Mesh GenerateStar();
+static Mesh GenerateShip();
 
 // ------- EXTERN CONSTS ------- //
 const Mesh Meshes::CUBE = GenerateCube();
 const Mesh Meshes::PYRAMID = GeneratePyramid();
-const Mesh Meshes::CONE = GenerateCone(7);
+const Mesh Meshes::SHIP = GenerateShip();
+const Mesh Meshes::CONE = GenerateCone(8);
 const Mesh Meshes::QUAD = GenerateQuad();
 const Mesh Meshes::STAR = GenerateStar();
 
@@ -53,6 +55,22 @@ static Mesh GeneratePyramid() {
 	Primitive back { br, bl, tip };
 
 	return { left, right, front, back };
+}
+
+static Mesh GenerateShip() {
+	Vertex bl(-0.5f, -0.25f, -0.5f);
+	Vertex br(0.5f, -0.25f, -0.5f);
+	Vertex fl(-0.5f, -0.25f, 0.5f);
+	Vertex fr(0.5f, -0.25f, 0.5f);
+	Vertex tip(0, 0.5f, 0);
+	Vertex bottomTip(0, -0.5f, 0);
+
+	Primitive left{ bottomTip, bl, tip, fl };
+	Primitive right{ bottomTip, br, tip, fr };
+	Primitive front{ bottomTip, fr, tip, fl };
+	Primitive back{ bottomTip, br, tip, bl };
+
+	return { left, right, front };
 }
 
 static Mesh GenerateCone(int numBottomVerts) {

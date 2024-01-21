@@ -8,17 +8,17 @@
 // Generic, derivable GameObject class which manages its components.
 class GameObject {
 private:
-	std::unordered_map<std::string, std::unique_ptr<Component::Component>> _components;
+	std::unordered_map<std::string, std::shared_ptr<Component::Component>> _components;
 public:
 	virtual void Update(float deltaTime) { }
-	virtual void LateUpdate(float deltaTime) { }  // Used to apply transformations after checking collisions
 	virtual void Render(Graphics& context) { }
 
 	template <class T>
-	void CreateComponent(T component) {
+	T* CreateComponent(T component) {
 		std::string componentId = typeid(T).name();
 		assert(_components.count(componentId) == 0 && "Component already exists");
-		_components.insert({ componentId, std::make_unique<T>(component)});
+		_components.insert({ componentId, std::make_shared<T>(component) });
+		return static_cast<T*>(_components[componentId].get());
 	}
 
 	template <class T>

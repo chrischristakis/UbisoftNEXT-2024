@@ -7,6 +7,7 @@
 // -------- PARTICLE -------- //
 
 Particle::Particle(Vector3f position,
+				   const Mesh* mesh,
 				   Vector3f velocity,
 				   float ttl,
 				   float scale,
@@ -17,20 +18,21 @@ Particle::Particle(Vector3f position,
 				   velocity(velocity), 
 				   ttl(ttl), 
 				   scale(scale),
-				   initial_ttl(ttl) { }
+				   initial_ttl(ttl),
+				   mesh(mesh) { }
 
 bool Particle::Update(float deltaTime) {
-	position = position + velocity;
+	position = position + velocity * deltaTime;
 
 	ttl -= deltaTime;
 	
 	return ttl > 0.0f;
 }
 
-void Particle::Render(Graphics& context, const Mesh& mesh) {
+void Particle::Render(Graphics& context) {
 	Mat4x4 model = Math::Transform::Translate(Mat4x4::Identity(), position);
 	model = Math::Transform::Scale(model, { scale, scale, scale });
-	context.RenderMesh(mesh, model, color * (ttl / initial_ttl));
+	context.RenderMesh(*mesh, model, color * (ttl / initial_ttl));
 }
 
 
@@ -38,29 +40,17 @@ void Particle::Render(Graphics& context, const Mesh& mesh) {
 
 ParticleEmitter::ParticleEmitter(int MAX_PARTICLES) {
 	for (int i = 0; i < MAX_PARTICLES; i++)
-		_particlePool.push_back(Particle({ 0, 0, 0 }));
+		_particlePool.push_back(Particle({ 0, 0, 0 }, &Meshes::CUBE));
 	_numActive = 0;
 }
 
-void ParticleEmitter::Create(Vector3f position,
-							 Vector3f velocity,
-							 float ttl,
-							 float scale,
-							 Vector3f color) {
+void ParticleEmitter::Create(Particle p) {
 	int index = _GetAvailableParticle();
 
 	if (index == -1)
 		return; // If we can't keep up, just don't create anything.
 
-	Particle& particle = _particlePool[index];
-
-	particle.position = position;
-	particle.velocity = velocity;
-	particle.color = color;
-	
-	particle.ttl = ttl;
-	particle.initial_ttl = ttl;
-	particle.scale = scale;
+	_particlePool[index] = p;
 }
 
 // We keep particles that are active at the front of the pool,
@@ -96,7 +86,11 @@ void ParticleEmitter::Update(float deltaTime) {
 	}
 }
 
-void ParticleEmitter::Render(Graphics& context, const Mesh& mesh) {
+void ParticleEmitter::Render(Graphics& context) {
 	for (int i = 0; i < _numActive; i++)
-		_particlePool[i].Render(context, mesh);
+		_particlePool[i].Render(context);
+}
+
+void ParticleEmitter::Clear() {
+	_numActive = 0;
 }

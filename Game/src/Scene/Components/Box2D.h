@@ -16,7 +16,7 @@ namespace Component {
 		void SyncPositionWithTransform(Transform& transform);
 
 		bool CollidesWithRay(const Vector2f& rayOrigin, const Vector2f& rayDir, 
-							 Vector2f& contactPoint, Vector2f& contactNormal, float& timeToHitNear);
+							 Vector2f& contactPoint, Vector2f& contactNormal, float& timeToHitNear) const;
 
 		// Draw colliders on a plane defined by z
 		void Render(Graphics& context, float z, Vector3f color = {0, 1, 1});

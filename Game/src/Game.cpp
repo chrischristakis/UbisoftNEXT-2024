@@ -19,7 +19,7 @@ void Init()
 
 void Update(float deltaTime)
 {
-	scene->Update(deltaTime);
+	scene->Update(deltaTime / 1000.0f);
 }
 
 void Render()

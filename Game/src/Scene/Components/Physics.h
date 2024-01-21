@@ -7,11 +7,11 @@ namespace Component {
 
 	class Physics: public Component{
 	public:
-		Vector3f velocity;
-		Vector3f acceleration;
+		Vector2f velocity;
+		Vector2f acceleration;
 
 		Physics();
-		Physics(Vector3f velocity, Vector3f acceleration);
+		Physics(Vector2f velocity, Vector2f acceleration = Vector2f(0, 0));
 	};
 
 }

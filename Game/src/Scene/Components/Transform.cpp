@@ -9,9 +9,9 @@ namespace Component {
 
 	Mat4x4 Transform::CreateModelMatrix() {
 		Mat4x4 model = Math::Transform::Translate(Mat4x4::Identity(), position);
-		model = Math::Transform::RotateX(model, rotation.x);
-		model = Math::Transform::RotateY(model, rotation.y);
 		model = Math::Transform::RotateZ(model, rotation.z);
+		model = Math::Transform::RotateY(model, rotation.y);
+		model = Math::Transform::RotateX(model, rotation.x);
 		model = Math::Transform::Scale(model, scale);
 
 		return model;

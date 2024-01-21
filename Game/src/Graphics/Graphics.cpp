@@ -35,7 +35,11 @@ void Graphics::RenderMesh(const Mesh& mesh, const Mat4x4& model, float r, float 
 	_RenderMesh(mesh, model, true, { r, g, b });
 }
 
-void Graphics::_RenderMesh(const Mesh& mesh, const Mat4x4& model, bool useOverridenColor, const Vector3f& color) {
+void Graphics::RenderUnclippedMesh(const Mesh& mesh, const Mat4x4& model, const Vector3f& color) {
+	_RenderMesh(mesh, model, true, color, false);
+}
+
+void Graphics::_RenderMesh(const Mesh& mesh, const Mat4x4& model, bool useOverridenColor, const Vector3f& color, bool clipping) {
 	
 	for (const Primitive& prim : mesh) {
 		PrimitiveAvgDepth processedPrim;
@@ -57,7 +61,8 @@ void Graphics::_RenderMesh(const Mesh& mesh, const Mat4x4& model, bool useOverri
 			}
 
 			// Track num of occurances of vertices that are off the screen.
-			if( clipSpace.x > clipSpace.w || clipSpace.x < -clipSpace.w ||
+			if( clipping && 
+				clipSpace.x > clipSpace.w || clipSpace.x < -clipSpace.w ||
 				clipSpace.y > clipSpace.w || clipSpace.y < -clipSpace.w)
 				numClipped++;
 
@@ -95,7 +100,7 @@ void Graphics::_RenderMesh(const Mesh& mesh, const Mat4x4& model, bool useOverri
 		// (To prevent visual artefacts)
 		// but more leeway for x and y clipping so that the primitive isnt clipped the moment
 		// a single vertex leaves the frustum.
-		if(!clipped && numClipped != prim.vertices.size())
+		if(!clipping || !clipped && numClipped != prim.vertices.size())
 			_primsToRender.emplace_back(processedPrim);
 	}
 }
