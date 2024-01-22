@@ -2,47 +2,55 @@
 
 #include "BulletPool.h"
 #include "Components/Transform.h"
+#include "Components/CircleCollider.h"
 
 BulletPool::BulletPool(int MAX_BULLETS) : MAX_BULLETS(MAX_BULLETS) {
 	// Initialize pool with empty bullets
 	for (int i = 0; i < MAX_BULLETS; i++)
 		bullets.push_back(Projectile());
-	_activeBullets = 0;
+	activeBullets = 0;
 }
 
 void BulletPool::Update(float deltaTime) {
-	for (int i = 0; i < _activeBullets; i++) {
+	std::vector<int> toRemove;
+	for (int i = 0; i < activeBullets; i++) {
 		if (bullets[i].ttl > 0.0f)
 			bullets[i].Update(deltaTime);
 		else
-			_DestroyBullet(i);
+			toRemove.push_back(i);
 	}
+
+	for (int i : toRemove)
+		DestroyBullet(i);
 }
 
 void BulletPool::Render(Graphics& context) {
-	for (int i = 0; i < _activeBullets; i++)
+	for (int i = 0; i < activeBullets; i++)
 		bullets[i].Render(context);
 }
 
 void BulletPool::CreateBullet(Projectile proj) {
-	int index = _GetAvailableBullet();
+	int index = GetAvailableBullet();
+	if (index == -1)
+		return;
 	bullets[index] = proj;
 }
 
-int BulletPool::_GetAvailableBullet() {
-	assert(_activeBullets < MAX_BULLETS && "Too many bullets!");
-	return _activeBullets++;
+int BulletPool::GetAvailableBullet() {
+	if (activeBullets >= MAX_BULLETS)
+		return -1;
+	return activeBullets++;
 }
 
-void BulletPool::_DestroyBullet(int index) {
-	assert(index >= 0 && index < _activeBullets && "Invalid index to destroy");
+void BulletPool::DestroyBullet(int index) {
+	assert(index >= 0 && index < activeBullets && "Invalid index to destroy");
 	
-	Projectile lastActive = bullets[_activeBullets - 1];
-	bullets[_activeBullets - 1] = bullets[index];
+	Projectile lastActive = bullets[activeBullets - 1];
+	bullets[activeBullets - 1] = bullets[index];
 	bullets[index] = lastActive;
-	_activeBullets--;
+	activeBullets--;
 }
 
 void BulletPool::Clear() {
-	_activeBullets = 0;
+	activeBullets = 0;
 }

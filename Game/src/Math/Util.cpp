@@ -22,8 +22,12 @@ namespace Math {
 		return v1.x * v2.x + v1.y * v2.y;
 	}
 
-	float Distance(const Vector2f& v) {
+	float Magnitude(const Vector2f& v) {
 		return sqrt(v.x * v.x + v.y * v.y);
+	}
+
+	float Distance(const Vector2f& v1, const Vector2f& v2) {
+		return abs(Magnitude(v1 - v2));
 	}
 
 	Vector3f Normalize(const Vector3f& v) {
@@ -55,5 +59,9 @@ namespace Math {
 			res *= -1;
 
 		return res;
+	}
+
+	bool RandomBool() {
+		return static_cast<bool>(rand() % 2);
 	}
 }

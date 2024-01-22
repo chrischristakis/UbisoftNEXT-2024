@@ -19,6 +19,7 @@ void Init()
 
 void Update(float deltaTime)
 {
+	// Delta time is coverted to MS
 	scene->Update(deltaTime / 1000.0f);
 }
 

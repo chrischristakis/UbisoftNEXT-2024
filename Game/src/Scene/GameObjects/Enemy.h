@@ -11,18 +11,15 @@ private:
 	BulletPool* _bulletPool;
 	ParticleEmitter* _emitter;
 
-	const float SHOOT_PLAYER_COOLDOWN = 1.0f;
-	float _shootPlayerCooldownTimer;
-
-	const float EMINATION_COOLDOWN = 0.05f;
-	float _eminationCooldownTimer;
-
 public:
 	Enemy();
 	Enemy(Vector2f position, Vector2f velocity, Player* player, ParticleEmitter* emitter, BulletPool* bulletpool);
 
 	void Update(float deltaTime) override;
+	void UpdateCooldowns(float deltaTime);
 	void Render(Graphics& context) override;
+
+	void Explode(); // just A particle effect
 
 	void ShootAtPlayer();
 	void EminateParticle();

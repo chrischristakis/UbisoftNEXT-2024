@@ -35,12 +35,14 @@
     <ClCompile Include="src\Scene\GameObjects\Player.cpp" />
     <ClCompile Include="src\Scene\Components\Transform.cpp" />
     <ClCompile Include="src\Scene\Components\Physics.cpp" />
-    <ClCompile Include="src\Scene\Components\Box2D.cpp" />
     <ClCompile Include="src\Scene\GameObjects\Deathbox.cpp" />
-    <ClCompile Include="src\Scene\Components\Rect.cpp" />
     <ClCompile Include="src\Scene\GameObjects\Projectile.cpp" />
     <ClCompile Include="src\Scene\BulletPool.cpp" />
     <ClCompile Include="src\Scene\GameObjects\Enemy.cpp" />
+    <ClCompile Include="src\Scene\Components\Cooldown.cpp" />
+    <ClCompile Include="src\Scene\Components\CircleCollider.cpp" />
+    <ClCompile Include="src\Scene\Components\Health.cpp" />
+    <ClCompile Include="src\Scene\EnemyPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\stdafx.h" />
@@ -87,12 +89,14 @@
     <ClInclude Include="src\Scene\GameObjects\Player.h" />
     <ClInclude Include="src\Constants.h" />
     <ClInclude Include="src\Scene\Components\Physics.h" />
-    <ClInclude Include="src\Scene\Components\Box2D.h" />
     <ClInclude Include="src\Scene\GameObjects\Deathbox.h" />
-    <ClInclude Include="src\Scene\Components\Rect.h" />
     <ClInclude Include="src\Scene\GameObjects\Projectile.h" />
     <ClInclude Include="src\Scene\BulletPool.h" />
     <ClInclude Include="src\Scene\GameObjects\Enemy.h" />
+    <ClInclude Include="src\Scene\Components\Cooldown.h" />
+    <ClInclude Include="src\Scene\Components\CircleCollider.h" />
+    <ClInclude Include="src\Scene\Components\Health.h" />
+    <ClInclude Include="src\Scene\EnemyPool.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="stb_image">

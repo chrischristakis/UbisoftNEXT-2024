@@ -13,9 +13,6 @@ private:
 	ParticleEmitter* _emitter;
 	BulletPool* _bulletPool;
 
-	const float BULLET_COOLDOWN = 1.0f; // in seconds
-	float _bulletCooldownTimer;
-
 	// Initial conditions
 	Vector2f _initialPos;
 public:
@@ -26,11 +23,15 @@ public:
 	void Update(float deltaTime) override;
 	void Render(Graphics& context) override;
 	void RenderAimLine(Graphics& context); // renders out the line that indicates where they player is aiming
+	void RenderLives(Graphics& context); // renders out the line that indicates where they player is aiming
 
 	void UpdateCursorPos();
+	void UpdateCooldowns(float deltaTime);
 	void ProcessInput();
 
 	void FireBullet();
+
+	void TriggerHit();
 
 	void Reset();
 

@@ -4,15 +4,15 @@
 #include "../Graphics/Graphics.h"
 #include "GameObjects/Projectile.h"
 
-class BulletPool {
-private:
+class BulletPool {	
+public:
 	const int MAX_BULLETS;
 	std::vector<Projectile> bullets;
-	unsigned int _activeBullets = 0;
+	unsigned int activeBullets = 0;
 
-	int _GetAvailableBullet();
-	void _DestroyBullet(int index);
-public:
+	int GetAvailableBullet();
+	void DestroyBullet(int index);
+
 	BulletPool(int MAX_BULLETS);
 
 	void Update(float deltaTime);
