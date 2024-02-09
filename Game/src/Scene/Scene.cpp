@@ -155,6 +155,7 @@ void Scene::DoCollisions(float deltaTime) {
 	}
 
 	Component::CircleCollider& playerCollider = *player->GetComponent<Component::CircleCollider>();
+	Component::Health& playerHealth = *player->GetComponent<Component::Health>();
 	std::vector<int> toRemove;
 
 	// handle Player - Bullet collisions
@@ -166,7 +167,7 @@ void Scene::DoCollisions(float deltaTime) {
 
 		Component::CircleCollider& bulletCollider = *bullet.GetComponent<Component::CircleCollider>();
 
-		if (playerCollider.CollidesWith(bulletCollider)) {
+		if (!playerHealth.invincible && playerCollider.CollidesWith(bulletCollider)) {
 			toRemove.push_back(i);
 			player->TriggerHit();
 		}
